@@ -4,12 +4,7 @@ title: About
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
+Nate Reed is a person in Austin, Texas. He's also a data afficionado (data-phile?), hacker/developer and real estate investor. When he's not sitting in front of his computer he can be found lifting weights, cycling, listening to electronic music or reading the latest Jack Reacher novel. 
 
-You can find the source code for the Jekyll new theme at:
-{% include icon-github.html username="jekyll" %} /
-[minima](https://github.com/jekyll/minima)
-
-You can find the source code for Jekyll at
-{% include icon-github.html username="jekyll" %} /
-[jekyll](https://github.com/jekyll/jekyll)
+You can find his github repo at
+{% include icon-github.html username="natereed" %} 

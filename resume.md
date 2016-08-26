@@ -3,19 +3,18 @@ layout: page
 title: Resume
 permalink: /resume/
 ---
-Nate Reed
-============
 
-phone: (512)424-9900
+Contact 
+-------
+phone: (512)424-9900  
 email: nate@natereed.com
 
 Summary
 -------
-Experienced technologist and developer seeking a data scientist role. Skilled in coding, data wrangling, data visualization and predictive modeling.
+Experienced technologist and developer seeking a data scientist role. Skilled in coding, data wrangling, data visualization and analysis. Familiar with predictive modeling and machine learning techniques.
 
 Technical Skills
 ----------------
-
 
 <table>
 <tr>
@@ -48,92 +47,83 @@ Technical Skills
 </tr>
 </table>
 
-
-
 -------------------------------
+
+Data Science Projects
+-----------------------------
+
+**Edgar Document Scraping (D&B Partner Innovation Center)**  
+* Enabled Capital Markets partnerships by blending D&B’s proprietary company data with information on company securities (eg. CUSIP #’s) obtain from public SEC filings 
+* Developed Python scripts for scraping unstructured text, ETL and analysis
+* Achieved ~85% coverage of the common stock of publicly -traded companies, as well as significant coverage of bonds and other securities offerings.
+
+**Business Seal Image Search (D&B Partner Innovation Center)**
+* Architected solution for finding unauthorized use of business seals such as those of the BBB (Better Business Bureau)
+* Developed scripts to automate image searches using TinEye’s API 
+* Collaborated with Content Innovation and Analytics teams to build a predictive model relating fraud risk to unauthorized seal usage.
+ 
+**Baseball Story**
+* Analyzed batting and pitching skills using an historical database
+* Applied exploratory analysis and statistics to answer the question: ["Are Pitchers Good at Batting?"](https://natereed.github.io/baseball-investigation/)
+* Technologies used: Pandas, Numpy, matplotlib
+ 
+**Text Data Analytics (NLP – Coursera)**
+* Used R to analyze SwiftKey text dataset and develop a predictive model for natural language (in-progress)
+
+**GHRSST (Global High-Resolution Sea Surface Temperature), Jet Propulsion Laboratory**
+* Implemented system for ingest and management of satellite remote sensing meta-data (PHP, Perl).
+* Received NASA Board Award and credited in a [NASA Tech Brief](http://www.techbriefs.com/component/content/article/ntb/tech-briefs/software/2393).
+
+**SCCOOS (Southern California Coastal Observing System), Jet Propulsion Laboratory**
+* Researched web-based GIS tools
+* Developed an early prototype using MapServer
+
+**Awarix Enterprise Patient Care Visibility**
+* Developed innovative real-time patient data visualization tool (Java, XML, SVG).
+
+Employment
+----------
+**Lead Developer, Partner Innovation Center**  
+**Dun and Bradstreet, Austin, TX**  						**2014-2016**
+
+* Developed POC’s and prototypes to drive new partnerships and organically grow existing ones such as data.com (Salesforce)
+* Presented ideas and demo's to internal and external audiences
+* Focused on acquiring new data and demonstrating analytics on D&B data
+* Collaborated with strategists and other teams within D&B to enable conversations with prospective partners 
+
+**Senior Software Engineer, Technology**  
+**Dun and Bradstreet, Austin, TX**  						**2013 - 2014**
+
+* Designed and developed major components of D&B 360, Dun and Bradstreet's CRM integration product
+* Refactored code and improved test coverage
+
+**Senior Software Engineer**  
+**Involver, Inc. (now Oracle), Austin, TX**					**2011 – 2012**
+
+**Senior Java Developer (Contractor)**  
+**Dun and Bradstreet (formerly Hoovers, Inc.), Austin, TX			**2010 – 2011**
+
+**Software Engineer**  
+**Various Internet and Media companies, Los Angeles, CA**			**2007 - 2010**
+
+**Software Engineer**  
+**Awarix (now Mckesson), Birmingham, Alabama**					**2005 – 2006**  
+Developed innovative real-time patient data visualization product at healthcare technology startup
+
+**Senior Software Engineer**
+**Raytheon ITSS / Jet Propulsion Lab, Pasadena, CA**				**1999 - 2005**  
+Developed innovative data management and visualization tools for oceanography data center
 
 Education
 ---------
 
-2010-2014 (expected)
-:   **PhD, Computer Science**; Awesome University (MyTown)
+**Johns Hopkins (in-progress), Coursera**  
+Data Science Specialization
+
+**Indiana University, Bloomington**  
+Bachelor of Science with Honors, Computer Science; Minor, Mathematics.
+
+**Texas Academy of Mathematics and Science**, University of North Texas  
+Earned two years of college credit as a full-time university student while completing high school.
 
 
-    *Thesis title: Deep Learning Approaches to the Self-Awesomeness
-     Estimation Problem*
-
-2007-2010
-:   **BSc, Computer Science and Electrical Engineering**; University of
-    HomeTown (HomeTown)
-
-    *Minor: Awesomeology*
-
-Experience
-----------
-
-**Your Most Recent Work Experience:**
-
-Short text containing the type of work done, results obtained,
-lessons learned and other remarks. Can also include lists and
-links:
-
-* First item
-
-* Item with [link](http://www.example.com). Links will work both in
-  the html and pdf versions.
-
-**That Other Job You Had**
-
-Also with a short description.
-
-Technical Experience
---------------------
-
-My Cool Side Project
-:   For items which don't have a clear time ordering, a definition
-    list can be used to have named items.
-
-    * These items can also contain lists, but you need to mind the
-      indentation levels in the markdown source.
-    * Second item.
-
-Open Source
-:   List open source contributions here, perhaps placing emphasis on
-    the project names, for example the **Linux Kernel**, where you
-    implemented multithreading over a long weekend, or **node.js**
-    (with [link](http://nodejs.org)) which was actually totally
-    your idea...
-
-Programming Languages
-:   **first-lang:** Here, we have an itemization, where we only want
-    to add descriptions to the first few items, but still want to
-    mention some others together at the end. A format that works well
-    here is a description list where the first few items have their
-    first word emphasized, and the last item contains the final few
-    emphasized terms. Notice the reasonably nice page break in the pdf
-    version, which wouldn't happen if we generated the pdf via html.
-
-:   **second-lang:** Description of your experience with second-lang,
-    perhaps again including a [link] [ref], this time placing the url
-    reference elsewhere in the document to reduce clutter (see source
-    file). 
-
-:   **obscure-but-impressive-lang:** We both know this one's pushing
-    it.
-
-:   Basic knowledge of **C**, **x86 assembly**, **forth**, **Common Lisp**
-
-[ref]: https://github.com/githubuser/superlongprojectname
-
-Extra Section, Call it Whatever You Want
-----------------------------------------
-
-* Human Languages:
-
-     * English (native speaker)
-     * ???
-     * This is what a nested list looks like.
-
-* Random tidbit
-
-* Other sort of impressive-sounding thing you did
