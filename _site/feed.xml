@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Nate Reed</title>
+    <description>Nate Reed is a technologist, data scientist and developer in Austin, TX.
+</description>
+    <link>http://example.com/</link>
+    <atom:link href="http://example.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sun, 28 Aug 2016 15:27:53 -0500</pubDate>
+    <lastBuildDate>Sun, 28 Aug 2016 15:27:53 -0500</lastBuildDate>
+    <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>Working with Large Data Sets in R</title>
+        <description>&lt;p&gt;Typically, analysis in R is performed in RAM on a single node compute cluster.&lt;/p&gt;
+
+&lt;p&gt;As the scale of data grows, the analyst is forced to make some tradeoffs among considerations such as time, space and accuracy. A prediction method might be very accurate but unsuitable for production due to its slow running time. A larger training set leads to greater accuracy but tests the limits of hardware.&lt;/p&gt;
+
+&lt;p&gt;For very large data sets, R might be in the wrong class of tools altogether. For “medium size” data – too large to make sense of in a spreadsheet, but too small to justify Hadoop or other “Big Data” solutions – we would like to use R to develop an effective prototype within the time and space constraints that we inevitably face.&lt;/p&gt;
+
+&lt;p&gt;There are at least a couple ways that we can use to make these tough jobs in R easier:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Chunking and checkpoints&lt;/li&gt;
+  &lt;li&gt;Parallelism&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The concept of parallelism is well-understood, and there are many resources that explain packages like &lt;em&gt;foreach&lt;/em&gt; and &lt;em&gt;parallel&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Another important concept is how large tasks can be broken up into small pieces, to make it easier to track work. In addition, chunking large tasks makes it possible to recover from failures.&lt;/p&gt;
+
+&lt;p&gt;In a follow-up post, I will show my “chunking” module, which can be used to break up a large piece of work into smaller ones.&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 22 Aug 2016 20:17:27 -0500</pubDate>
+        <link>http://example.com/r/data-wrangling/2016/08/22/wrangling-large-data-sets-in-R-part-1.html</link>
+        <guid isPermaLink="true">http://example.com/r/data-wrangling/2016/08/22/wrangling-large-data-sets-in-R-part-1.html</guid>
+        
+        
+        <category>R</category>
+        
+        <category>data-wrangling</category>
+        
+      </item>
+    
+  </channel>
+</rss>
