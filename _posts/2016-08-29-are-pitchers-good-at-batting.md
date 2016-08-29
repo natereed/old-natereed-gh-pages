@@ -20,7 +20,7 @@ The designated hitter rule, adopted in 1973 by the American League, allows one p
 
 ![Batting Averages Time Series](/images/batting-averages-time-series.png)
 
-Based on compensation, it is clear that fielding is valued highly in baseball, and that players who can both bat and play a position are worth more than players who are only good at one or the other.
+Based on compensation, it is clear that a combination of fielding and batting skills are more highly valued highly in baseball than batting alone, despite the addition of a batting specialist position in the American League.
 
 In most of history (and to this day in leagues like the National League), pitchers also bat. Other position players may also pitch. Such [versatility has become increasingly common][position-players-increasingly-called-upon-to-pitch] recently. 
 
@@ -44,13 +44,13 @@ I used a t-test to test our null hypothesis:
 
 ## Other Observations and Thoughts
 
-The idea that better players get more opportunities may seem self-evident, but it's worth repeating. As we raise the bar for players in our sample sets, by requiring greater "At Bats" and "Innings Pitched", we get two smaller groups that become similar. These are players that get more opportunities to bat and pitch because they are good enough at each skill to earn a place on the starting roster. Therefore, in such a comparison, we would expect their averages to diverge less than the averages in our test above.
+The idea that better players get more opportunities may seem self-evident, but it's worth repeating. As we raise the bar for players in our sample sets, by requiring greater numbers of "At Bats," our pitcher group becomes more like the group of other players. These are players that get more opportunities to bat and pitch because they are good enough at each skill to earn a place on the starting roster. Therefore, in such a comparison, we would expect their averages to diverge less than the averages in our test above.
 
 Also, note that the set of pitchers that bat is small compared to the set of other players that bat. As we raise the threshold for "At Bats", we will find fewer and fewer pitchers that bat, to the point where we might not be able to find a large enough sample to come to a conclusion with any degree of certainty.
 
 ## Conclusion
 
-For the given data and criteria we used to define these groups, pitchers are clearly worse at batting than other players.
+For the given data and criteria we used to define these groups, pitchers are clearly worse at batting than other players. The designated hitter rule generated higher batting averages because pitchers, generally speaking, are not good batters.
 
 The iPython notebook for generating the above plots can be found on [github](http://github.com/natereed/springboard-baseball-story.git).
 
