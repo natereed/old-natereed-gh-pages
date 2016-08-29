@@ -6,9 +6,69 @@
 </description>
     <link>http://example.com/</link>
     <atom:link href="http://example.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 29 Aug 2016 10:18:28 -0500</pubDate>
-    <lastBuildDate>Mon, 29 Aug 2016 10:18:28 -0500</lastBuildDate>
+    <pubDate>Mon, 29 Aug 2016 13:24:52 -0500</pubDate>
+    <lastBuildDate>Mon, 29 Aug 2016 13:24:52 -0500</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>Are Pitchers Good at Batting?</title>
+        <description>&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;I was curious about the batting skills of pitchers (and the pitching skills of batters ), so I trawled through &lt;a href=&quot;http://www.seanlahman.com/baseball-archive/statistics/&quot;&gt;Lahman’s baseball database&lt;/a&gt;, going back to the beginning of the National League in 1871. I analyzed batting and pitching data to answer the question: “Are Pitchers Good at Batting?”&lt;/p&gt;
+
+&lt;p&gt;Having some limited knowledge of the game, I already had an idea of the answer in the back of my mind. I wanted to check if my preconceptions were correct.&lt;/p&gt;
+
+&lt;h2 id=&quot;background&quot;&gt;Background&lt;/h2&gt;
+
+&lt;p&gt;Pitcher is the &lt;a href=&quot;http://www.businessinsider.com/major-league-baseballs-highest-paid-positions-sports-chart-of-the-day-2012-9&quot;&gt;second most highly compensated position&lt;/a&gt; next to First Baseman.&lt;/p&gt;
+
+&lt;p&gt;Designated Hitter is at the bottom. This surprised me, as I had assumed that great hitters would be very valuable. The viewing public loves hits and home runs, just as they are entertained by touchdowns and goals in football and soccer. Great hitters are responsible for some of the greatest moments in baseball history.&lt;/p&gt;
+
+&lt;p&gt;The designated hitter rule, adopted in 1973 by the American League, allows one player to bat in place of the pitcher. This rationale for this rule is the observation that pitchers tend to be weak hitters. Perhaps as expected, when the designated hitter rule was introduced in American League, batting averages trended up. Meanwhile, averages changed little in the National League:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/batting-averages-time-series.png&quot; alt=&quot;Batting Averages Time Series&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Based on compensation, it is clear that fielding is valued highly in baseball, and that players who can both bat and play a position are worth more than players who are only good at one or the other.&lt;/p&gt;
+
+&lt;p&gt;In most of history (and to this day in leagues like the National League), pitchers also bat. Other position players may also pitch. Such &lt;a href=&quot;http://m.mlb.com/news/article/78938922/position-players-increasingly-called-upon-to-pitch/&quot;&gt;versatility has become increasingly common&lt;/a&gt; recently.&lt;/p&gt;
+
+&lt;p&gt;Due to circumstances, many players have pitched in relief, and some who are known for their batting skills have pitched well enough to earn multiple trips to the mound. An even smaller group has excelled at both pitching and hitting. Babe Ruth comes to mind as the rare unicorn who was great at both.&lt;/p&gt;
+
+&lt;h2 id=&quot;methodology&quot;&gt;Methodology&lt;/h2&gt;
+
+&lt;p&gt;I divided the batting data into two groups: pitchers who bat, and all other players. Initially, this selected a large number of players who have done a little of both. The non-pitchers were better batters than the pitchers by a wide margin (0.23 vs. 0.17).&lt;/p&gt;
+
+&lt;p&gt;I wanted to consider only players with significant game experience with batting and pitching. I eliminated all players who had fewer than 100 “At Bats”, and from the pitching group I eliminated those with fewer than 100 innings.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/batting-averages-pitchers-vs-others.png&quot; alt=&quot;Batting Averages for Pitchers and Non-Pitchers&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Even after filtering out the dilletantes, the pitching group still appears to have a lower average than the non-pitchers (.218 vs. .256).&lt;/p&gt;
+
+&lt;p&gt;I used a t-test to test our null hypothesis:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/batting-averages-t-test.png&quot; alt=&quot;Batting Averages T-Test&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The p-value is very low, so we can reject the null hypothesis at the 95% confidence level.&lt;/p&gt;
+
+&lt;h2 id=&quot;other-observations-and-thoughts&quot;&gt;Other Observations and Thoughts&lt;/h2&gt;
+
+&lt;p&gt;The idea that better players get more opportunities may seem self-evident, but it’s worth repeating. As we raise the bar for players in our sample sets, by requiring greater “At Bats” and “Innings Pitched”, we get two smaller groups that become similar. These are players that get more opportunities to bat and pitch because they are good enough at each skill to earn a place on the starting roster. Therefore, in such a comparison, we would expect their averages to diverge less than the averages in our test above.&lt;/p&gt;
+
+&lt;p&gt;Also, note that the set of pitchers that bat is small compared to the set of other players that bat. As we raise the threshold for “At Bats”, we will find fewer and fewer pitchers that bat, to the point where we might not be able to find a large enough sample to come to a conclusion with any degree of certainty.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;For the given data and criteria we used to define these groups, pitchers are clearly worse at batting than other players.&lt;/p&gt;
+
+&lt;p&gt;The iPython notebook for generating the above plots can be found on &lt;a href=&quot;http://github.com/natereed/springboard-baseball-story.git&quot;&gt;github&lt;/a&gt;.&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 29 Aug 2016 00:00:00 -0500</pubDate>
+        <link>http://example.com/are-pitchers-good-at-batting/</link>
+        <guid isPermaLink="true">http://example.com/are-pitchers-good-at-batting/</guid>
+        
+        
+      </item>
     
       <item>
         <title>Working with Large Data Sets in R</title>
