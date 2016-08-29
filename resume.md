@@ -53,32 +53,39 @@ Data Science Projects
 -----------------------------
 
 **Edgar Document Scraping (D&B Partner Innovation Center)**  
+
 * Enabled Capital Markets partnerships by blending D&B’s proprietary company data with information on company securities (eg. CUSIP #’s) obtain from public SEC filings 
 * Developed Python scripts for scraping unstructured text, ETL and analysis
 * Achieved ~85% coverage of the common stock of publicly -traded companies, as well as significant coverage of bonds and other securities offerings.
 
 **Business Seal Image Search (D&B Partner Innovation Center)**
+
 * Architected solution for finding unauthorized use of business seals such as those of the BBB (Better Business Bureau)
 * Developed scripts to automate image searches using TinEye’s API 
 * Collaborated with Content Innovation and Analytics teams to build a predictive model relating fraud risk to unauthorized seal usage.
  
 **Baseball Story**
+
 * Analyzed batting and pitching skills using an historical database
 * Applied exploratory analysis and statistics to answer the question: ["Are Pitchers Good at Batting?"](https://natereed.github.io/baseball-investigation/)
 * Technologies used: Pandas, Numpy, matplotlib
  
 **Text Data Analytics (NLP – Coursera)**
+
 * Used R to analyze SwiftKey text dataset and develop a predictive model for natural language (in-progress)
 
 **GHRSST (Global High-Resolution Sea Surface Temperature), Jet Propulsion Laboratory**
+
 * Implemented system for ingest and management of satellite remote sensing meta-data (PHP, Perl).
 * Received NASA Board Award and credited in a [NASA Tech Brief](http://www.techbriefs.com/component/content/article/ntb/tech-briefs/software/2393).
 
 **SCCOOS (Southern California Coastal Observing System), Jet Propulsion Laboratory**
+
 * Researched web-based GIS tools
 * Developed an early prototype using MapServer
 
 **Awarix Enterprise Patient Care Visibility**
+
 * Developed innovative real-time patient data visualization tool (Java, XML, SVG).
 
 Employment
