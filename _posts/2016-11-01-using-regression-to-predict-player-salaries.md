@@ -34,14 +34,12 @@ First, let us construct a regression model on team wins. What are the key driver
 
 In an iPython notebook or Python shell, first load the data and select all the columns which could be predictors:
 
-{% highlight python %}
 import numpy as np
 import pandas as pd
 import os
 
 teams_df = pd.read_csv(os.path.join("data", "lahman", "baseballdatabank-master", "core", "Teams.csv"))
-{% endhighlight %}
-
+teams_df.head()
 
 # Subset
 
