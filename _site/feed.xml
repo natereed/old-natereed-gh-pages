@@ -4,86 +4,103 @@
     <title>Nate Reed</title>
     <description>Nate Reed is a technologist, data scientist and developer in Austin, TX.
 </description>
-    <link>http://example.com/</link>
-    <atom:link href="http://example.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 01 Nov 2016 17:52:30 -0500</pubDate>
-    <lastBuildDate>Tue, 01 Nov 2016 17:52:30 -0500</lastBuildDate>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Wed, 02 Nov 2016 11:43:30 -0500</pubDate>
+    <lastBuildDate>Wed, 02 Nov 2016 11:43:30 -0500</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
-        <title>Using Regression to Predict Player Salaries</title>
-        <description>&lt;p&gt;In baseball and other sports, player compensation continues to go up, and sports fans try to make sense of the
-year-to-year ascent of player salaries into the stratosphere. Surely, we think, salaries must be based on some rational
-measures of productivity on the field.&lt;/p&gt;
+        <title>Using Regression to Predict Baseball Salaries</title>
+        <description>&lt;ol&gt;
+  &lt;li&gt;Introduction&lt;/li&gt;
+  &lt;li&gt;About Regression&lt;/li&gt;
+  &lt;li&gt;The Data&lt;/li&gt;
+  &lt;li&gt;Regression Example: Model Team Wins&lt;/li&gt;
+  &lt;li&gt;Exploring Player Salaries&lt;/li&gt;
+  &lt;li&gt;Modeling Player Salaries&lt;/li&gt;
+  &lt;li&gt;Regularization&lt;/li&gt;
+  &lt;li&gt;Conclusions&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;introduction&quot;&gt;1. Introduction&lt;/h2&gt;
+
+&lt;p&gt;In baseball and other sports, we often wonder what drives player compensation. Highly-sought free agents seem to sign record-breaking
+contracts every year. Surely, we think, salaries must be based on some rational measures of productivity on the field.&lt;/p&gt;
 
 &lt;p&gt;I used regression to answer the question: What drives player salaries?  My working hypothesis is that player
-salaries are largely determined by on-field statistics, information that is available to all parties.&lt;/p&gt;
+salaries are largely determined by on-field statistics, information that is available to all parties, including the player agents
+ and general managers who negotiate contracts.&lt;/p&gt;
 
 &lt;p&gt;I will first show basic linear regression, and then dive into regularization, a technique which can be used to perform
 feature selection, reduce model complexity and prevent over-fitting. We will use these techniques to understand the
 relationship between salaries and performance on the field.&lt;/p&gt;
 
-&lt;p&gt;Regression&lt;/p&gt;
+&lt;h2 id=&quot;about-regression&quot;&gt;2. About Regression&lt;/h2&gt;
 
 &lt;p&gt;Multiple regression is the most basic modeling technique for understanding the relationship between two or more variables.
 I’m going to assume familiarity with regression, but if you would like a refresher, the following is an excellent primer.
 https://www.analyticsvidhya.com/blog/2015/10/regression-python-beginners/&lt;/p&gt;
 
-&lt;p&gt;The Data&lt;/p&gt;
+&lt;h2 id=&quot;the-data&quot;&gt;3. The Data&lt;/h2&gt;
 
 &lt;p&gt;Data going back to the beginning of baseball in 1871 is available in the Lahman database. Initially, I created my own
 database by scraping data from MLB.com and USAToday.com, but later I found that data as recent as the 2015 season
 is available on Sean Lahman’s website http://www.seanlahman.com/baseball-archive/statistics/. It appears that the
 database is updated at the end of each season, as the last update was March 2016.&lt;/p&gt;
 
-&lt;p&gt;A Model for Team Wins&lt;/p&gt;
+&lt;h2 id=&quot;regression-example-model-team-wins&quot;&gt;4. Regression Example: Model Team Wins&lt;/h2&gt;
 
 &lt;p&gt;First, let us construct a regression model on team wins. What are the key drivers of winning in baseball?&lt;/p&gt;
 
-&lt;p&gt;In an iPython notebook or Python shell, first load the data and select all the columns which could be predictors:&lt;/p&gt;
+&lt;p&gt;In an iPython notebook or Python shell, first load the data and subset the data frame to include columns which could be predictors:&lt;/p&gt;
 
-&lt;p&gt;import numpy as np
-import pandas as pd
-import os&lt;/p&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;numpy&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;np&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pandas&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pd&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;os&lt;/span&gt;
 
-&lt;p&gt;teams_df = pd.read_csv(os.path.join(“data”, “lahman”, “baseballdatabank-master”, “core”, “Teams.csv”))
-teams_df.head()&lt;/p&gt;
+&lt;span class=&quot;n&quot;&gt;teams_df&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read_csv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;data&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;lahman&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;baseballdatabank-master&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;core&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Teams.csv&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;h1 id=&quot;subset&quot;&gt;Subset&lt;/h1&gt;
+&lt;h3 id=&quot;subset&quot;&gt;Subset&lt;/h3&gt;
 
-&lt;p&gt;subset_columns = [‘G’, ‘W’, ‘L’]
-subset_columns.extend(teams_df.columns[14:-3].values)
-subset_columns.remove(‘name’)
-subset_columns.remove(‘park’)
-subset_columns.remove(‘attendance’)
-teams_df = pd.DataFrame(teams_df, columns=subset_columns)
-teams_df.head()&lt;/p&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;subset_columns&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'G'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'W'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'L'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;subset_columns&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;extend&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;teams_df&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;columns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;14&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;subset_columns&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;remove&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'name'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;subset_columns&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;remove&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'park'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;subset_columns&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;remove&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'attendance'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;teams_df&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DataFrame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;teams_df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;columns&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subset_columns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;Next, we calculate WPCT (winning percentage):
-teams_df[‘Winning Percentage’] = teams_df[‘W’] / (teams_df[‘W’] + teams_df[‘L’])&lt;/p&gt;
+&lt;p&gt;Next, we calculate WPCT (winning percentage):&lt;/p&gt;
 
-&lt;h1 id=&quot;normalization&quot;&gt;Normalization&lt;/h1&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;teams_df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Winning Percentage'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;teams_df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'W'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;teams_df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'W'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;teams_df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'L'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;for column in teams_df.columns:
-     teams_df[column] = (teams_df[column] - teams_df[column].min()) / (teams_df[column].max() - teams_df[column].min())
-teams_df = teams_df.round(3)
-teams_df = teams_df.fillna(0.0)&lt;/p&gt;
+&lt;h3 id=&quot;normalize-and-replace-missing-values&quot;&gt;Normalize and Replace Missing Values&lt;/h3&gt;
 
-&lt;h1 id=&quot;train-test&quot;&gt;Train, test&lt;/h1&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;column&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;teams_df&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;columns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+     &lt;span class=&quot;n&quot;&gt;teams_df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;column&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;teams_df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;column&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;teams_df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;column&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;teams_df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;column&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;teams_df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;column&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;teams_df&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;teams_df&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;round&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;teams_df&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;teams_df&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fillna&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;We will use a typical test/train split to construct the model and test it on a separate set of data:&lt;/p&gt;
+&lt;h3 id=&quot;train-test&quot;&gt;Train, test&lt;/h3&gt;
 
-&lt;p&gt;regr = linear_model.LinearRegression()
-x_train, x_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=0.3, random_state=55)
-regr.fit(x_train, y_train)
-score = regr.score(x_test, y_test)
-print(score)&lt;/p&gt;
+&lt;p&gt;We will use construct the model and test it on a separate set of data:&lt;/p&gt;
 
-&lt;p&gt;0.915994428193&lt;/p&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;scikitlearn.linear_model&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LinearRegression&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;linear_model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LinearRegression&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;x_train&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x_test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y_train&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y_test&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cross_validation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;train_test_split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test_size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;random_state&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;55&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x_train&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y_train&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;score&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;score&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x_test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y_test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;score&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;Interpretation&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;0.915994428193&lt;/em&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;results&quot;&gt;Results&lt;/h3&gt;
 
 &lt;p&gt;Not bad! An R^2 of 0.916 means we can explain almost 92% of the variance in wins with our model.&lt;/p&gt;
+
+&lt;p&gt;Note that we used split the data into train and test sets, then scored the resulting model on the test set. This is a standard
+technique to avoid “overfitting”. It gives us a more accurate idea of how well the model generalizes to new data. There are even more
+elaborate techniques which I will describe in the next section.&lt;/p&gt;
 
 &lt;p&gt;In scikit learn, it is a bit difficult to see inside of a regression model. This framework is designed for training and
 testing machine learning models where one might have hundreds of variables. It is excellent for tuning ML parameters, but
@@ -93,79 +110,194 @@ to the response variable.&lt;/p&gt;
 &lt;p&gt;For those familiar with R, statsmodels uses R-style formulas and prints a summary of the results that looks very similar
 to the output of R’s summary(fit).&lt;/p&gt;
 
-&lt;h1 id=&quot;initial-model&quot;&gt;Initial Model&lt;/h1&gt;
+&lt;h3 id=&quot;inspect-coefficients&quot;&gt;Inspect Coefficients&lt;/h3&gt;
 
-&lt;p&gt;import statsmodels.api as sm
-import statsmodels.formula.api as smf
-from patsy import dmatrices&lt;/p&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;statsmodels.api&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sm&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;statsmodels.formula.api&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;smf&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;patsy&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dmatrices&lt;/span&gt;
 
-&lt;p&gt;teams_df.rename(columns={‘2B’ : ‘SECOND_BASE_HITS’, ‘3B’ : ‘THIRD_BASE_HITS’}, inplace=True)
-y, X = dmatrices(‘WIN_PCT ~ R + AB + H + SECOND_BASE_HITS + THIRD_BASE_HITS + HR + BB + SO + SB + CS + HBP + SF + RA + ER + ERA + CG + SHO + SV + IPouts + HA + HRA + BBA + SOA + E + DP + FP + BPF + PPF’,
-                 data=teams_df,
-                 return_type=’dataframe’)
-mod = sm.OLS(y, X)
-res = mod.fit()
-print(res.summary())&lt;/p&gt;
+&lt;span class=&quot;n&quot;&gt;teams_df&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rename&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;columns&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'2B'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'SECOND_BASE_HITS'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'3B'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'THIRD_BASE_HITS'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;inplace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;X&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dmatrices&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'WIN_PCT ~ R + AB + H + SECOND_BASE_HITS + THIRD_BASE_HITS + HR + BB + SO + SB + CS + HBP + SF + RA + ER + ERA + CG + SHO + SV + IPouts + HA + HRA + BBA + SOA + E + DP + FP + BPF + PPF'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                 &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;teams_df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                 &lt;span class=&quot;n&quot;&gt;return_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'dataframe'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;mod&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sm&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OLS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;res&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;summary&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;                        OLS Regression Results ============================================================================== Dep. Variable:                WIN_PCT   R-squared:                       0.901 Model:                            OLS   Adj. R-squared:                  0.900 Method:                 Least Squares   F-statistic:                     900.8 Date:                Tue, 01 Nov 2016   Prob (F-statistic):               0.00 Time:                        09:31:52   Log-Likelihood:                 5853.1 No. Observations:                2805   AIC:                        -1.165e+04 Df Residuals:                    2776   BIC:                        -1.148e+04 Df Model:                          28 Covariance Type:            nonrobust ====================================================================================
-                   coef    std err          t      P&amp;gt;|t|      [95.0% Conf. Int.] ------------------------------------------------------------------------------------ Intercept           -0.1666      0.071     -2.356      0.019        -0.305    -0.028 R                    0.8042      0.024     33.538      0.000         0.757     0.851 AB                  -0.3332      0.064     -5.189      0.000        -0.459    -0.207 H                   -0.0148      0.031     -0.472      0.637        -0.076     0.047 SECOND_BASE_HITS    -0.0101      0.009     -1.093      0.274        -0.028     0.008 THIRD_BASE_HITS     -0.0215      0.008     -2.853      0.004        -0.036    -0.007 HR                  -0.0489      0.008     -6.023      0.000        -0.065    -0.033 BB                  -0.0424      0.010     -4.316      0.000        -0.062    -0.023 SO                  -0.0010      0.008     -0.127      0.899        -0.016     0.014 SB                  -0.0396      0.007     -5.540      0.000        -0.054    -0.026 CS                   0.0016      0.005      0.315      0.753        -0.008     0.012 HBP                  0.0066      0.006      1.028      0.304        -0.006     0.019 SF                  -0.0128      0.006     -2.006      0.045        -0.025    -0.000 RA                  -0.6026      0.043    -13.955      0.000        -0.687    -0.518 ER                   0.3623      0.043      8.478      0.000         0.278     0.446 ERA                 -0.3191      0.026    -12.472      0.000        -0.369    -0.269 CG                   0.0634      0.009      7.266      0.000         0.046     0.081 SHO                  0.0387      0.006      6.479      0.000         0.027     0.050 SV                   0.1094      0.007     15.279      0.000         0.095     0.123 IPouts               0.0387      0.056      0.685      0.493        -0.072     0.149 HA                  -0.0568      0.033     -1.703      0.089        -0.122     0.009 HRA                  0.0008      0.009      0.088      0.930        -0.017     0.018 BBA                 -0.0086      0.010     -0.826      0.409        -0.029     0.012 SOA                 -0.0212      0.009     -2.314      0.021        -0.039    -0.003 E                    0.0495      0.017      2.979      0.003         0.017     0.082 DP                  -0.0044      0.006     -0.691      0.489        -0.017     0.008 FP                   0.8022      0.075     10.661      0.000         0.655     0.950 BPF                  0.0060      0.001     11.752      0.000         0.005     0.007 PPF                 -0.0060      0.001    -11.723      0.000        -0.007    -0.005 ============================================================================== Omnibus:                      604.327   Durbin-Watson:                   1.994 Prob(Omnibus):                  0.000   Jarque-Bera (JB):            17096.077 Skew:                          -0.339   Prob(JB):                         0.00 Kurtosis:                      15.075   Cond. No.                     2.61e+04 ==============================================================================
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;pre&gt;
+                            OLS Regression Results
+==============================================================================
+Dep. Variable:                WIN_PCT   R-squared:                       0.901
+Model:                            OLS   Adj. R-squared:                  0.900
+Method:                 Least Squares   F-statistic:                     900.8
+Date:                Tue, 01 Nov 2016   Prob (F-statistic):               0.00
+Time:                        09:31:52   Log-Likelihood:                 5853.1
+No. Observations:                2805   AIC:                        -1.165e+04
+Df Residuals:                    2776   BIC:                        -1.148e+04
+Df Model:                          28
+Covariance Type:            nonrobust
+====================================================================================
+                       coef    std err          t      P&amp;gt;|t|      [95.0% Conf. Int.]
+------------------------------------------------------------------------------------
+Intercept           -0.1666      0.071     -2.356      0.019        -0.305    -0.028
+R                    0.8042      0.024     33.538      0.000         0.757     0.851
+AB                  -0.3332      0.064     -5.189      0.000        -0.459    -0.207
+H                   -0.0148      0.031     -0.472      0.637        -0.076     0.047
+SECOND_BASE_HITS    -0.0101      0.009     -1.093      0.274        -0.028     0.008
+THIRD_BASE_HITS     -0.0215      0.008     -2.853      0.004        -0.036    -0.007
+HR                  -0.0489      0.008     -6.023      0.000        -0.065    -0.033
+BB                  -0.0424      0.010     -4.316      0.000        -0.062    -0.023
+SO                  -0.0010      0.008     -0.127      0.899        -0.016     0.014
+SB                  -0.0396      0.007     -5.540      0.000        -0.054    -0.026
+CS                   0.0016      0.005      0.315      0.753        -0.008     0.012
+HBP                  0.0066      0.006      1.028      0.304        -0.006     0.019
+SF                  -0.0128      0.006     -2.006      0.045        -0.025    -0.000
+RA                  -0.6026      0.043    -13.955      0.000        -0.687    -0.518
+ER                   0.3623      0.043      8.478      0.000         0.278     0.446
+ERA                 -0.3191      0.026    -12.472      0.000        -0.369    -0.269
+CG                   0.0634      0.009      7.266      0.000         0.046     0.081
+SHO                  0.0387      0.006      6.479      0.000         0.027     0.050
+SV                   0.1094      0.007     15.279      0.000         0.095     0.123
+IPouts               0.0387      0.056      0.685      0.493        -0.072     0.149
+HA                  -0.0568      0.033     -1.703      0.089        -0.122     0.009
+HRA                  0.0008      0.009      0.088      0.930        -0.017     0.018
+BBA                 -0.0086      0.010     -0.826      0.409        -0.029     0.012
+SOA                 -0.0212      0.009     -2.314      0.021        -0.039    -0.003
+E                    0.0495      0.017      2.979      0.003         0.017     0.082
+DP                  -0.0044      0.006     -0.691      0.489        -0.017     0.008
+FP                   0.8022      0.075     10.661      0.000         0.655     0.950
+BPF                  0.0060      0.001     11.752      0.000         0.005     0.007
+PPF                 -0.0060      0.001    -11.723      0.000        -0.007    -0.005
+==============================================================================
+Omnibus:                      604.327   Durbin-Watson:                   1.994
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):            17096.077
+Skew:                          -0.339   Prob(JB):                         0.00
+Kurtosis:                      15.075   Cond. No.                     2.61e+04
+==============================================================================
 
-&lt;p&gt;Warnings:
+Warnings:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 [2] The condition number is large, 2.61e+04. This might indicate that there are
-strong multicollinearity or other numerical problems.&lt;/p&gt;
+strong multicollinearity or other numerical problems.
+&lt;/pre&gt;
 
-&lt;p&gt;Several things to note:&lt;/p&gt;
+&lt;h3 id=&quot;interpret-resultscoefficients&quot;&gt;Interpret results/coefficients&lt;/h3&gt;
+
+&lt;p&gt;Wow, there is a lot of information here! I’ll just highlight a few things:&lt;/p&gt;
 
 &lt;ul&gt;
+  &lt;li&gt;Note the coefficients shown next to each variable. Not all of these will be used, as I will explain shortly.&lt;/li&gt;
   &lt;li&gt;R-squared was slightly lower this time. Remember, we used a test/train split first, then we constructed a model for the
 entire data set using statsmodels. We did this just to be able to see the coefficients.&lt;/li&gt;
   &lt;li&gt;P-values above 0.05 are high enough to be considered statistically insignificant. This means there is a good chance
-that the observed relationship between the predictor and response variables is due to random noise.&lt;/li&gt;
-  &lt;li&gt;Confidence intervals are shown for the 95% confidence level. Variables whose confidence intervals cross zero should be
+that the observed relationship between the predictor and response variables is the result of random variation.&lt;/li&gt;
+  &lt;li&gt;Confidence intervals are shown for the 95% confidence level. Variables whose confidence intervals include zero should be
  thrown out.&lt;/li&gt;
+  &lt;li&gt;Note the warnings about strong multicollinearity. Some of these variables are related. A good example is TB (Total Bases) and H (HITS), SECOND_BASE_HITS, THIRD_BASE_HITS and HR (Home Runs).&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;We will perform feature selection by eliminating those statistically insignificant variables. This will reduce model
-complexity and potential over-fitting.&lt;/p&gt;
+&lt;p&gt;We will perform feature selection by eliminating those statistically insignificant variables as well as ones with obvious correlations. This will reduce model complexity and potential over-fitting.&lt;/p&gt;
 
 &lt;p&gt;Below I show the final model I came up with:&lt;/p&gt;
 
-&lt;h1 id=&quot;final-model&quot;&gt;Final Model&lt;/h1&gt;
+&lt;h3 id=&quot;final-model&quot;&gt;Final Model&lt;/h3&gt;
 
-&lt;p&gt;y, X = dmatrices(‘WIN_PCT ~ R + AB + THIRD_BASE_HITS + HR + BB + SB + SF + RA + ER + ERA + CG + SHO + SV + E + FP + BPF + PPF’, data=teams_df, return_type=’dataframe’)
-mod = sm.OLS(y, X)
-res = mod.fit()
-print(res.summary())&lt;/p&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;X&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dmatrices&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'WIN_PCT ~ R + AB + THIRD_BASE_HITS + HR + BB + SB + SF + RA + ER + ERA + CG + SHO + SV + E + FP + BPF + PPF'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;teams_df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;return_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'dataframe'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;mod&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sm&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OLS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;res&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;summary&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;                        OLS Regression Results ============================================================================== Dep. Variable:                WIN_PCT   R-squared:                       0.900 Model:                            OLS   Adj. R-squared:                  0.900 Method:                 Least Squares   F-statistic:                     1483. Date:                Tue, 01 Nov 2016   Prob (F-statistic):               0.00 Time:                        09:30:20   Log-Likelihood:                 5847.3 No. Observations:                2805   AIC:                        -1.166e+04 Df Residuals:                    2787   BIC:                        -1.155e+04 Df Model:                          17 Covariance Type:            nonrobust ===================================================================================
-                  coef    std err          t      P&amp;gt;|t|      [95.0% Conf. Int.] ----------------------------------------------------------------------------------- Intercept          -0.1523      0.068     -2.232      0.026        -0.286    -0.019 R                   0.7878      0.013     58.903      0.000         0.762     0.814 AB                 -0.3580      0.020    -17.628      0.000        -0.398    -0.318 THIRD_BASE_HITS    -0.0200      0.007     -2.823      0.005        -0.034    -0.006 HR                 -0.0462      0.006     -7.376      0.000        -0.058    -0.034 BB                 -0.0384      0.007     -5.459      0.000        -0.052    -0.025 SB                 -0.0363      0.006     -6.096      0.000        -0.048    -0.025 SF                 -0.0115      0.004     -2.751      0.006        -0.020    -0.003 RA                 -0.6306      0.039    -16.323      0.000        -0.706    -0.555 ER                  0.3613      0.039      9.185      0.000         0.284     0.438 ERA                -0.3235      0.025    -13.184      0.000        -0.372    -0.275 CG                  0.0710      0.008      9.227      0.000         0.056     0.086 SHO                 0.0380      0.006      6.534      0.000         0.027     0.049 SV                  0.1087      0.007     15.490      0.000         0.095     0.123 E                   0.0589      0.015      4.003      0.000         0.030     0.088 FP                  0.7922      0.073     10.888      0.000         0.650     0.935 BPF                 0.0060      0.001     11.827      0.000         0.005     0.007 PPF                -0.0060      0.001    -11.887      0.000        -0.007    -0.005 ============================================================================== Omnibus:                      609.577   Durbin-Watson:                   1.993 Prob(Omnibus):                  0.000   Jarque-Bera (JB):            17556.500 Skew:                          -0.344   Prob(JB):                         0.00 Kurtosis:                      15.237   Cond. No.                     2.51e+04 ==============================================================================
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;pre&gt;
+                            OLS Regression Results
+==============================================================================
+Dep. Variable:                WIN_PCT   R-squared:                       0.900
+Model:                            OLS   Adj. R-squared:                  0.900
+Method:                 Least Squares   F-statistic:                     1483.
+Date:                Tue, 01 Nov 2016   Prob (F-statistic):               0.00
+Time:                        09:30:20   Log-Likelihood:                 5847.3
+No. Observations:                2805   AIC:                        -1.166e+04
+Df Residuals:                    2787   BIC:                        -1.155e+04
+Df Model:                          17
+Covariance Type:            nonrobust
+===================================================================================
+                      coef    std err          t      P&amp;gt;|t|      [95.0% Conf. Int.]
+-----------------------------------------------------------------------------------
+Intercept          -0.1523      0.068     -2.232      0.026        -0.286    -0.019
+R                   0.7878      0.013     58.903      0.000         0.762     0.814
+AB                 -0.3580      0.020    -17.628      0.000        -0.398    -0.318
+THIRD_BASE_HITS    -0.0200      0.007     -2.823      0.005        -0.034    -0.006
+HR                 -0.0462      0.006     -7.376      0.000        -0.058    -0.034
+BB                 -0.0384      0.007     -5.459      0.000        -0.052    -0.025
+SB                 -0.0363      0.006     -6.096      0.000        -0.048    -0.025
+SF                 -0.0115      0.004     -2.751      0.006        -0.020    -0.003
+RA                 -0.6306      0.039    -16.323      0.000        -0.706    -0.555
+ER                  0.3613      0.039      9.185      0.000         0.284     0.438
+ERA                -0.3235      0.025    -13.184      0.000        -0.372    -0.275
+CG                  0.0710      0.008      9.227      0.000         0.056     0.086
+SHO                 0.0380      0.006      6.534      0.000         0.027     0.049
+SV                  0.1087      0.007     15.490      0.000         0.095     0.123
+E                   0.0589      0.015      4.003      0.000         0.030     0.088
+FP                  0.7922      0.073     10.888      0.000         0.650     0.935
+BPF                 0.0060      0.001     11.827      0.000         0.005     0.007
+PPF                -0.0060      0.001    -11.887      0.000        -0.007    -0.005
+==============================================================================
+Omnibus:                      609.577   Durbin-Watson:                   1.993
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):            17556.500
+Skew:                          -0.344   Prob(JB):                         0.00
+Kurtosis:                      15.237   Cond. No.                     2.51e+04
+==============================================================================
 
-&lt;p&gt;Warnings:
+Warnings:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 [2] The condition number is large, 2.51e+04. This might indicate that there are
-strong multicollinearity or other numerical problems.&lt;/p&gt;
+strong multicollinearity or other numerical problems.
+&lt;/pre&gt;
 
 &lt;p&gt;The R^2 is 0.9, close to the accuracy of the original model, but we’ve simplified it somewhat.&lt;/p&gt;
 
-&lt;p&gt;Note the warning about multi-collinearity. It is possible some of these statistics are correlated with each other.
-We could simplify the model further by eliminating variables with co-linearity, but this is good enough for our
-purposes.&lt;/p&gt;
+&lt;p&gt;We still see the warning about multi-collinearity among the remaining variables. We could simplify the model further by eliminating some variables, but this is good enough for our purpose, which is to understand regression and the factors that drive wins.&lt;/p&gt;
 
 &lt;p&gt;Look at the coefficients. We see a strong relationship between Runs (0.78), Runs Allowed (-0.63) and Winning Percentage.
-This should be fundamentally obvious to anyone who understands baseball, but it is also a good illustration of how we
+This should be fundamentally obvious to anyone who understands baseball, but it is a good illustration of how we
 can use regression and interpret the results.&lt;/p&gt;
 
-&lt;p&gt;Modeling Player Salaries&lt;/p&gt;
+&lt;p&gt;Typically, statsmodels is used in the “statistics” world, while scikit learn is used in machine learning. They 
+each have strengths and weaknesses. The method shown above is one method of feature selection, but we would still want to
+see how well the model generalizes to new data. For that, the cross_validation module in scikit-learn is well-suited.&lt;/p&gt;
+
+&lt;h2 id=&quot;exploring-player-salaries&quot;&gt;5. Exploring Player Salaries&lt;/h2&gt;
 
 &lt;p&gt;If runs are the primary driver of team wins, what factors are most important when it comes to player salaries? The
 universe of possibilities is vast when it comes to predicting compensation. There are different types of players,
 playing different positions – some highly specialized – and they each have different strengths and weaknesses. In addition, there
 are other variables like the team budget. There is a wide range of payrolls by team in Major League Baseball.&lt;/p&gt;
+
+&lt;p&gt;To develop an intuition about which features could be predictive, it is helpful to do some exploratory analysis.  The full analysis is linked here, but I’ve included some key insights, below.&lt;/p&gt;
+
+&lt;h3 id=&quot;salary-distribution&quot;&gt;Salary Distribution&lt;/h3&gt;
+
+&lt;p&gt;The distribution of our salaries is left-skewed with a long right tail. A small number of players recieve disproportionately large salaries:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/salary-distribution.png&quot; alt=&quot;Salary Distribution&quot; title=&quot;Salary Distribution&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;player-statistics-vs-salaries&quot;&gt;Player Statistics vs. Salaries&lt;/h3&gt;
+
+&lt;p&gt;Shown are a few variables that appear to be highly correlated with salaries:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;img src=&quot;/images/salary-vs-rbi.png&quot; /&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;img src=&quot;/images/salary-vs-pitching-ip.png&quot; /&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;img src=&quot;/images/salary-vs-fpct.png&quot; /&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;img src=&quot;/images/salary-vs-career-batting-g.png&quot; /&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;RBI (runs batted in) is a batting metric commonly used to measure hitting ability. FPCT (Fielding Percentage) is the ratio of put-outs and assists to total chances. These, together with IP (Innings Pitched) and G (Batting Games) appear to be positively correlated to salaries.&lt;/p&gt;
+
+&lt;h2 id=&quot;modeling-player-salaries&quot;&gt;6. Modeling Player Salaries&lt;/h2&gt;
 
 &lt;p&gt;As with team wins, we will use regression to model player salaries, but I will introduce some automated techniques
 for feature selection. These techniques come in handy for highly-dimensional data and for tuning more complex models.&lt;/p&gt;
@@ -173,14 +305,14 @@ for feature selection. These techniques come in handy for highly-dimensional dat
 &lt;p&gt;We will go through the same kind of process for cleaning and normalizing the input variables that we executed above.
 Rather than embed the full code here, I will link to the iPython notebook and highlight the important modeling steps below.&lt;/p&gt;
 
-&lt;p&gt;The Data&lt;/p&gt;
+&lt;h3 id=&quot;the-data-1&quot;&gt;The Data&lt;/h3&gt;
 
-&lt;p&gt;I wrote a script that combines annual salaries with prior year playing statistics, labeled “{Statistic}.Year-1”. I only
-used the prior year, but I added a career statistic for several important variables. In other words, each row contains
-the current salary, data for the most recent year, and aggregate stats for the player’s entire career up to and including
+&lt;p&gt;I wrote a script (generate_observations.py) that combines annual salaries with prior year playing statistics, labeled “{Statistic}.Year-1”. I only used the prior year, but I added a career statistic for several important variables. In other words, each row contains the current salary, data for the most recent year, and aggregate stats for the player’s entire career up to and including
 the previous year of play.&lt;/p&gt;
 
-&lt;p&gt;Cleaning&lt;/p&gt;
+&lt;p&gt;The full data pipeline is documented in the github repo.&lt;/p&gt;
+
+&lt;h3 id=&quot;cleaning&quot;&gt;Cleaning&lt;/h3&gt;
 
 &lt;p&gt;My initial code for cleaning the input was quite involved, due to the fact that data was coming from scraped websites,
 in different character sets, and presentation-level data was mixed in with the underlying playing data. I modified
@@ -189,15 +321,16 @@ my data pipeline to use the Lahman database, obviating the need for this level o
 &lt;p&gt;As a result, most of my pre-processing work revolved around joining the different tables in the Lahman database to get a single
 table of observations (described in “The Data” section above).&lt;/p&gt;
 
-&lt;p&gt;Feature Engineering&lt;/p&gt;
+&lt;h3 id=&quot;feature-engineering&quot;&gt;Feature Engineering&lt;/h3&gt;
 
 &lt;p&gt;Not enough can be written about this topic, but feature engineering and feature selection are very important.
 Without the right data, we can’t build an accurate model.&lt;/p&gt;
 
-&lt;p&gt;Normalizing input variables makes it easier to interpret regression coefficients. Basically, this means mean-centering, then
-scaling the values so that they fall between 0 and 1. The formula for this is:&lt;/p&gt;
+&lt;p&gt;The first step in feature engineering was the data transformation work described above. We calculated career stats and combined previous year and career statistics with annual salaries.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(x - mean(x)) / (max(x) - min(x))
+&lt;p&gt;Normalizing input variables makes it easier to interpret regression coefficients. This means scaling the values so that they fall between 0 and 1. The formula for normalization is:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;z = (x - min(x)) / (max(x) - min(x))
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
@@ -207,28 +340,236 @@ scaling the values so that they fall between 0 and 1. The formula for this is:&l
 the natural growth in salaries with variance in our input variables. To make apples-to-apples comparisons between salaries
 in two different years, I created an ‘Adjusted Salary’ variable, which is calculated as follows:&lt;/p&gt;
 
-&lt;p&gt;Adjusted Salary = Salary / Average Annual Player Salary&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Adjusted Salary = Salary / Average Annual Player Salary
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;The Average Annual Player Salary is obtained by grouping salaries on year and calculating their mean.&lt;/p&gt;
 
 &lt;p&gt;Similarly, Team Payrolls (aggregate pay at the team level in any given year) grow over time. We perform a similar
 adjustment for team payrolls:&lt;/p&gt;
 
-&lt;p&gt;Adjusted Team Payroll = Team Payroll / Average Annual Team Payroll&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Adjusted Team Payroll = Team Payroll / Average Annual Team Payroll
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
-&lt;p&gt;Categorical variables have to be converted into ordinal values. A typical method is to create dummy variables, one for
+&lt;p&gt;Categorical variables have to be converted into ordinal or continuous values. A typical method is to create dummy variables, one for
 each value of the categorical variable. For player position, the following variables were created: 0.0, MULTIPLE (if a
 player played more than one position in a season), P (Pitcher), C (Catcher), SS (Short Stop), 1B (First Base), 2B (Second Base),
 and 3B (Third Base).&lt;/p&gt;
 
-&lt;p&gt;For regression&lt;/p&gt;
+&lt;h3 id=&quot;creating-the-linear-regression-model&quot;&gt;Creating the Linear Regression Model&lt;/h3&gt;
 
-&lt;h1 id=&quot;creating-the-linear-regression-model&quot;&gt;Creating the Linear Regression Model&lt;/h1&gt;
+&lt;p&gt;After cleaning the data and bringing it into the dataframe ‘df’, we fit a LinearRegression instance as we did with Team Wins, and observe the accuracy using a simple test-train split:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sklearn&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;linear_model&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sklearn&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cross_validation&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sklearn.model_selection&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cross_val_score&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sklearn.model_selection&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GroupKFold&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;players&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Player Id'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unique&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;linear_model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LinearRegression&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;asarray&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DataFrame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;copy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;columns&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;predictor_vars&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;asarray&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Adjusted Salary'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# Simple train/test split&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;x_train&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x_test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y_train&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y_test&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cross_validation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;train_test_split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test_size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;random_state&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;55&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x_train&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y_train&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;score&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;score&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x_test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y_test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;score&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;em&gt;0.677956364033&lt;/em&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;results-1&quot;&gt;Results&lt;/h3&gt;
+
+&lt;p&gt;R^2 = 0.68. This shows a significant degree of variance is explained by the features we included in the model, although it is not nearly
+as accurate as the Team Wins model we developed above.&lt;/p&gt;
+
+&lt;h3 id=&quot;use-cross-validation&quot;&gt;Use Cross-Validation&lt;/h3&gt;
+
+&lt;p&gt;To get a better test of fit, we will perform 5-fold cross validation. A more detailed explation of CV is here, but essentially this method involves systematically performing train/test splits, fitting the model and testing it on a holdout set. We repeat this for several subsets of training/test data and take the average score:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# K-fold group cross-validation&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Player Id'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;inplace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;players&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Player Id'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;groups&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;players&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Player Id'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;row&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;iterrows&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;scores&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cross_val_score&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;groups&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cv&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GroupKFold&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_splits&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Accuracy: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%0.2&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;f (+/- &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%0.2&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;f)&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scores&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mean&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scores&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;em&gt;Accuracy: 0.65 (+/- 0.08)&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Not bad. It shows a more realistic score of 0.65. Essentially, this is a measure of how well the model performs on new data.&lt;/p&gt;
+
+&lt;p&gt;Because we include potentially multiple years of data for each player, we have to be concerned about linear relationships among our observations. We used GroupKFold to ensure that no player appears in both test and train sets for any fold. This prevents over-fitting. While our observations within each fold are not linearly independent, the train and test splits remain independent.&lt;/p&gt;
+
+&lt;h3 id=&quot;model-complexity&quot;&gt;Model Complexity&lt;/h3&gt;
+
+&lt;p&gt;As we discussed in the first part on Team Wins, too many features can make the model unstable. Relationships could be inferred from variations that are just noise, resulting in overfitting. We will try to reduce model complexity through feature selection.&lt;/p&gt;
+
+&lt;p&gt;Besides the approach we showed in part one, a well-known approach to reducing model complexity is Regularization. I encourage you to read the tutorial linked here for understanding and motivation for Regularization, if you need an introduction or refresher.&lt;/p&gt;
+
+&lt;h2 id=&quot;regularization&quot;&gt;Regularization&lt;/h2&gt;
+
+&lt;p&gt;There are two types of regularization for regression problems, and one which combines them:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Ridge: Performs L2 regularization&lt;/li&gt;
+  &lt;li&gt;LASSO: Performs L1 regularization&lt;/li&gt;
+  &lt;li&gt;ElasticNet: Combines L1 and L2&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;All three of these add a penalty to the regression equation. In Ordinary Least Squares (the regression we performed above), the objective is to minimize the sum of the differences between the observed and predicted values.&lt;/p&gt;
+
+&lt;p&gt;L2 minimizes a combination of the sum of the squares of the errors, as in OLS, and the sum of the squares of the coefficients. L1 minimizes a combination of the sum of the squares of the errors, as in OLS, and the sum of absolute value of coefficients.&lt;/p&gt;
+
+&lt;p&gt;The equations for L1 and L2 include the parameter alpha:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;L1 minimization objective = LS Obj + α * (sum of absolute value of coefficients)
+L2 minimization objective = LS Obj + α * (sum of square of coefficients)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The effect of regularization is to shrink or eliminate coefficients. Note that Ridge regression will retain all variables, while LASSO will eliminate variables. ElasticNet will achieve results in-between these approaches, as it performs a combination of L1 and L2 regularization.&lt;/p&gt;
+
+&lt;h3 id=&quot;ridge-regression&quot;&gt;Ridge Regression&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;alpha_ridge&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1e-15&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1e-10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1e-8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1e-5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1e-4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1e-3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1e-2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'alpha'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;alpha_ridge&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;linear_model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Ridge&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GridSearchCV&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cv&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GroupKFold&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_splits&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;groups&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;The best parameters are &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s with a score of &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%0.2&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;f&quot;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;best_params_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;best_score_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;em&gt;The best parameters are {‘alpha’: 5} with a score of 0.62&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;We look at the coefficients&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;ridge_coefficients&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;col&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;enumerate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;columns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ridge_coefficients&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;col&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;coef_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;ridge_coefficients&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;pre&gt;
+{'0.0': -0.39057587143910538,
+ '1B': 0.28963831227462217,
+ '2B': 0.5567740265667418,
+ '3B': -0.38383354872414599,
+ 'Adjusted Team Payroll': 0.56405102067908308,
+ 'Batting_Career_2B': 3.1522634262159572,
+ 'Batting_Career_3B': 1.392063383072341,
+ 'Batting_Career_AVG': -1.3374777290310322,
+ 'Batting_Career_G': -6.0410423257153951,
+ 'Batting_Career_H': 2.8558911690964304,
+ 'Batting_Career_HR': 0.56139270540886621,
+ 'Batting_Career_Num_Seasons': -0.19560965106335085,
+ 'Batting_Career_OBP': 0.16138792259196344,
+ 'Batting_Career_PSN': 1.3988969443216634,
+ 'Batting_Career_R': -2.2951722609059919,
+ 'Batting_Career_RBI': 3.0095553387131413,
+ 'Batting_Career_SB': -1.1627478339088211,
+ 'Batting_Career_SLG': 2.4792002682158638,
+ 'Batting_Career_TB': -1.3751761008729613,
+ 'C': -0.035421691264489852,
+ 'Fielding_Career_A': -0.20547783542690334,
+ 'Fielding_Career_E': 0.65918312303112425,
+ 'Fielding_Career_FPCT': 0.17174074638196138,
+ 'Fielding_Career_G': 2.5841653004703784,
+ 'Fielding_Career_PO': 0.46558699831991984,
+ 'Fielding_G': 0.0,
+ 'Fielding_Num_Seasons': 0.0,
+ 'MULTIPLE': -0.098250785476812943,
+ 'Num_All_Star_Appearances': 2.2108124099949258,
+ 'Num_Post_Season_Appearances': 0.18745542926727987,
+ 'P': -0.088231982270278009,
+ 'Pitching_Career_ER': -10.598771122237048,
+ 'Pitching_Career_ERA': 0.28550993623861992,
+ 'Pitching_Career_GS': -2.3114192891981071,
+ 'Pitching_Career_IP': 5.1199564678367455,
+ 'Pitching_Career_L': 2.6376961419350953,
+ 'Pitching_Career_Num_Seasons': -0.015269958669084009,
+ 'Pitching_Career_SO': 5.7323124475788303,
+ 'Pitching_Career_W': 3.520676452015632,
+ 'SS': 0.14990154035196948}
+&lt;/pre&gt;
+
+&lt;h3 id=&quot;lasso&quot;&gt;LASSO&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;alpha_lasso&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1e-15&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1e-10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1e-8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1e-5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1e-4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1e-3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1e-2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'alpha'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;alpha_lasso&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;linear_model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Lasso&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GridSearchCV&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cv&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GroupKFold&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_splits&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;groups&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;The best parameters are &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s with a score of &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%0.2&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;f&quot;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;best_params_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;best_score_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;The best parameters are {‘alpha’: 0.001} with a score of 0.62&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;linear_model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Lasso&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;alpha&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.001&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;groups&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;lasso_coefficients&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;col&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;enumerate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;columns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;lasso_coefficients&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;col&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;coef_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;lasso_coefficients&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;pre&gt;
+{'0.0': -0.28592675529735534,
+ '1B': 0.26181856934547587,
+ '2B': 0.35404526164078254,
+ '3B': -0.12171969885924695,
+ 'Adjusted Team Payroll': 0.54231569987963457,
+ 'Batting_Career_2B': 1.3545359477186045,
+ 'Batting_Career_3B': 0.53306092429719154,
+ 'Batting_Career_AVG': -0.24680673375303361,
+ 'Batting_Career_G': -0.0,
+ 'Batting_Career_H': 0.0,
+ 'Batting_Career_HR': 1.284782720712615,
+ 'Batting_Career_Num_Seasons': -1.3358330510491565,
+ 'Batting_Career_OBP': -0.0,
+ 'Batting_Career_PSN': 0.32905664259505402,
+ 'Batting_Career_R': -0.0,
+ 'Batting_Career_RBI': 0.0085320537162230231,
+ 'Batting_Career_SB': -0.0,
+ 'Batting_Career_SLG': 0.98473350955245387,
+ 'Batting_Career_TB': 0.52052229008278961,
+ 'C': 0.018720803576232986,
+ 'Fielding_Career_A': -0.0,
+ 'Fielding_Career_E': 0.0033981909511692017,
+ 'Fielding_Career_FPCT': 0.0,
+ 'Fielding_Career_G': 1.1812941142468409,
+ 'Fielding_Career_PO': 0.070324444252947163,
+ 'Fielding_G': 0.0,
+ 'Fielding_Num_Seasons': 0.0,
+ 'MULTIPLE': -0.00011525840125545478,
+ 'Num_All_Star_Appearances': 2.9686885540278687,
+ 'Num_Post_Season_Appearances': 0.080096705748976094,
+ 'P': -0.025495777914012779,
+ 'Pitching_Career_ER': -0.71225349778559355,
+ 'Pitching_Career_ERA': -0.0,
+ 'Pitching_Career_GS': 0.0,
+ 'Pitching_Career_IP': -0.0,
+ 'Pitching_Career_L': -0.0,
+ 'Pitching_Career_Num_Seasons': -0.0,
+ 'Pitching_Career_SO': 5.2272363822703554,
+ 'Pitching_Career_W': 0.0,
+ 'SS': 0.12223098736421924}
+&lt;/pre&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;{} variables selected.&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lasso_coefficients&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lasso_coefficients&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;em&gt;25 variables selected.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Nice! Many of the 38 variables we originally used were eliminated.&lt;/p&gt;
 
 </description>
         <pubDate>Tue, 01 Nov 2016 00:00:00 -0500</pubDate>
-        <link>http://example.com/using-regression-to-predict-player-salaries/</link>
-        <guid isPermaLink="true">http://example.com/using-regression-to-predict-player-salaries/</guid>
+        <link>http://localhost:4000/using-regression-to-predict-team-wins/</link>
+        <guid isPermaLink="true">http://localhost:4000/using-regression-to-predict-team-wins/</guid>
         
         
       </item>
@@ -287,8 +628,8 @@ and 3B (Third Base).&lt;/p&gt;
 
 </description>
         <pubDate>Mon, 29 Aug 2016 00:00:00 -0500</pubDate>
-        <link>http://example.com/are-pitchers-good-at-batting/</link>
-        <guid isPermaLink="true">http://example.com/are-pitchers-good-at-batting/</guid>
+        <link>http://localhost:4000/are-pitchers-good-at-batting/</link>
+        <guid isPermaLink="true">http://localhost:4000/are-pitchers-good-at-batting/</guid>
         
         
       </item>
@@ -316,8 +657,8 @@ and 3B (Third Base).&lt;/p&gt;
 
 </description>
         <pubDate>Mon, 22 Aug 2016 20:17:27 -0500</pubDate>
-        <link>http://example.com/r/data-wrangling/2016/08/22/wrangling-large-data-sets-in-R-part-1.html</link>
-        <guid isPermaLink="true">http://example.com/r/data-wrangling/2016/08/22/wrangling-large-data-sets-in-R-part-1.html</guid>
+        <link>http://localhost:4000/r/data-wrangling/2016/08/22/wrangling-large-data-sets-in-R-part-1.html</link>
+        <guid isPermaLink="true">http://localhost:4000/r/data-wrangling/2016/08/22/wrangling-large-data-sets-in-R-part-1.html</guid>
         
         
         <category>R</category>

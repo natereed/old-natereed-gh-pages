@@ -18,7 +18,7 @@ email: nate@natereed.com
 description: > # this means to ignore newlines until "baseurl:"
   Nate Reed is a technologist, data scientist and developer in Austin, TX.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://example.com" # the base hostname & protocol for your site
+url: "http://localhost:4000" # the base hostname & protocol for your site
 twitter_username: natereed
 github_username:  natereed
 
