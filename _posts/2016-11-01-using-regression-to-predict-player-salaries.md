@@ -5,23 +5,26 @@ permalink: /using-regression-to-predict-baseball-salaries/
 ---
 
 1. [Introduction](#introduction)
-2. [About Regression](#about) 
-3. [The Data](#the-data)
-4. [Regression Example: Model Team Wins](#team-wins)
-5. [Exploring Player Salaries](#explore-player-salaries)
-6. [Modeling Player Salaries](#modeling-player-salaries)
-7. [Regularization](#regularization)
+2. [Requirements](#requirements)
+3. [About Regression](#about) 
+4. [The Data](#the-data)
+5. [Regression Example: Model Team Wins](#team-wins)
+6. [Exploring Player Salaries](#explore-player-salaries)
+7. [Modeling Player Salaries](#modeling-player-salaries)
+8. [Regularization](#regularization)
 * a. [Ridge](#ridge)
 * b. [LASSO](#lasso)
 * c. [ElasticNet](#elastic-net)
 * d. [Results](#results)
-8. [A Simplified Model](#a-simplified-model)
-9. [Summary and Conclusions](#summary-and-conclusions)
+9. [A Simplified Model](#a-simplified-model)
+10. [Summary](#summary)
+11. [Conclusions](#conclusions)
+12. [The Code](#the-code)
 
 ## 1. <a name="introduction">Introduction</a>
 
 In baseball and other sports, we often wonder what drives player compensation. Highly-sought free agents sign record-breaking
-contracts in seemingly every off-season. Surely, we think, salaries must be based on some rational measures of productivity on the field.
+contracts in what seems like every off-season. Surely, we think, salaries must be based on some rational measures of productivity on the field.
 
 I used regression to answer the question: What drives player salaries?  My working hypothesis is that player
 salaries are largely determined by on-field statistics, information that is available to all parties, including the player agents
@@ -31,20 +34,24 @@ I will first show basic linear regression, and then dive into regularization, a 
 feature selection, reduce model complexity and prevent over-fitting. We will use these techniques to understand the
 relationship between salaries and performance on the field.
 
-## 2. <a name="about">About Regression</a>
+## 2. <a name="requirements">Requirements</a>
+
+The code I will show requires Python 3, scikit-learn, pandas, numpy and statsmodels. The Anaconda distribution is recommended and can be downloaded [here](https://www.continuum.io/downloads).
+
+## 3. <a name="about">About Regression</a>
 
 Multiple regression is the most basic modeling technique for understanding the relationship between two or more variables.
 I'm going to assume familiarity with regression, but if you would like a refresher, the following is an excellent primer.
 https://www.analyticsvidhya.com/blog/2015/10/regression-python-beginners/
 
-## 3. <a name="the-data">The Data</a>
+## 4. <a name="the-data">The Data</a>
 
 Data going back to the beginning of baseball in 1871 is available in the Lahman database. Initially, I created my own
 database by scraping data from MLB.com and USAToday.com, but later I found that data as recent as the 2015 season
 is available on Sean Lahman's website http://www.seanlahman.com/baseball-archive/statistics/. It appears that the
 database is updated at the end of each season, as the last update was March 2016.
 
-## 4. <a name="team-wins">Regression Example: Model Team Wins</a>
+## 5. <a name="team-wins">Regression Example: Model Team Wins</a>
 
 First, let us construct a regression model on team wins. What are the key drivers of winning in baseball?
 
@@ -272,7 +279,7 @@ Typically, statsmodels is used in the "statistics" world, while scikit learn is 
 each have strengths and weaknesses. The method shown above is one method of feature selection, but we would still want to
 see how well the model generalizes to new data. For that, the cross_validation module in scikit-learn is well-suited. 
 
-## 5. <a name="exploring-player-salaries">Exploring Player Salaries</a>
+## 6. <a name="exploring-player-salaries">Exploring Player Salaries</a>
 
 If runs are the primary driver of team wins, what factors are most important when it comes to player salaries? The
 universe of possibilities is vast when it comes to predicting compensation. There are different types of players,
@@ -304,7 +311,7 @@ Shown are a few variables that appear to be highly correlated with salaries:
 
 RBI (runs batted in) is a batting metric commonly used to measure hitting ability. FPCT (Fielding Percentage) is the ratio of put-outs and assists to total chances. These, together with IP (Innings Pitched) and G (Batting Games) appear to be positively correlated to salaries.
 
-## 6. <a name="modeling-player-salaries">Modeling Player Salaries</a>
+## 7. <a name="modeling-player-salaries">Modeling Player Salaries</a>
 
 As with team wins, we will use regression to model player salaries, but I will introduce some automated techniques
 for feature selection. These techniques come in handy for highly-dimensional data and for tuning more complex models. 
@@ -1056,7 +1063,7 @@ This is also a benefit in computationally expensive problems where there are a l
 
 ElasticNet performed in-between Ridge and LASSO.  
 
-## 8. <a name="a-simplified-model">A Simplified Model</a>
+## 9. <a name="a-simplified-model">A Simplified Model</a>
 
 My favorite approach to this problem was simply fitting an OLS model in statsmodels and eliminating the statistically insignificant variables.
 
@@ -1113,16 +1120,26 @@ I like the OLS summary from statsmodels because it's very easy to interpret:
 * NO_POSITION: This might require further investigation, but I suspect this refers to designated hitters. They would play no fielding position. On average, they earn less, hence the negative correlation.
 * First and Second base players earn more on average.
 
-## 9. <a name="summary-and-conclusions">Summary and Conclusions</a>
+## 10. <a name="summary-and-conclusions">Summary</a>
 
 We looked at multiple regression for modeling a couple of interesting variables in baseball: team wins and player salaries. I showed 3 regularization techniques for performing automated feature selection during cross-validation to score model accuracy. As a result, we have a model that is more robust, parsimonious and less prone to over-fitting.
 
 I also showed how feature selection could be performed by eliminating statistically insignificant variables, with similar benefits as regularization. The statsmodels package makes this very easy by producing summary output that is similar to R's.
 
-We determined that the most important drivers of baseball compensation are a handful of commonly-used metrics of batting and pitching ability, as well as the position played.
+## 11. <a name="conclusions">Conclusions</a>
 
-Our model accuracy is not as good as the team wins model. There is a great deal of variation in player salaries, not all of which can be explained by the data. Maybe there is more data that could be added to our regression model. It's more likely, though, that much of what drives player compensation is random chance, errors in financial judgement or bias.
+The most important predictor of winning is runs.
 
-Michael Lewis writes about the puzzling way that baseball scouts evaluate players in his well-known book, Moneyball. By using statistical analysis and smart management of the roster, the Oakland A's fielded a winning team despite having one of the lowest payrolls in major league baseball. One of the book's key insights is that hitting skill is overvalued. This is consistent with our simplified model, in which TB (Total Bases) is an important component.
+The most important drivers of baseball compensation include a few commonly-used metrics of batting and pitching ability, the number of all-star appearances, and fielding position.
 
- The ability to get on base is what's important -- whether that is accomplished by walks or hits. By recruiting players with high OBP (on-base percentage) and OK hitting skills, salaries can be minimized while achieving good numbers of runs. Runs -- not hits -- is the critical driver for winning, as we showed in the Team Wins model.
+The salaries model is not as accurate as the team wins model. There is a great deal of variation in player salaries, not all of which can be explained by the data. Maybe there is more data that could be added to our regression model. It's more likely, though, that much of what drives player compensation is random chance, errors in financial judgement and bias.
+
+In [Moneyball](https://www.amazon.com/Moneyball-Art-Winning-Unfair-Game/dp/0393324818), Michael Lewis writes about the puzzling way that baseball scouts evaluate players. By using statistical analysis and smart management of the roster, the Oakland A's fielded a winning team despite having one of the lowest payrolls in major league baseball. One of the book's key insights is that hitting skill is overvalued. This is consistent with our salaries model, of which TB (Total Bases) is an important component. 
+
+When it comes to winning, the ability to get on base is what's important -- whether that is accomplished by walks or hits. By recruiting players with high OBP (on-base percentage) and OK hitting skills, salaries can be minimized while achieving good numbers of runs. Runs -- not hits -- is the critical driver for winning.
+
+# 12. <a name="the-code">The Code</a>
+
+The code can be found [here](https://github.com/natereed/predicting-team-wins-and-player-salaries).
+
+

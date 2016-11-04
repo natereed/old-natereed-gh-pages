@@ -6,14 +6,15 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 04 Nov 2016 13:36:26 -0500</pubDate>
-    <lastBuildDate>Fri, 04 Nov 2016 13:36:26 -0500</lastBuildDate>
+    <pubDate>Fri, 04 Nov 2016 15:15:32 -0500</pubDate>
+    <lastBuildDate>Fri, 04 Nov 2016 15:15:32 -0500</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
         <title>Using Regression to Predict Baseball Salaries</title>
         <description>&lt;ol&gt;
   &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#requirements&quot;&gt;Requirements&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#about&quot;&gt;About Regression&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#the-data&quot;&gt;The Data&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#team-wins&quot;&gt;Regression Example: Model Team Wins&lt;/a&gt;&lt;/li&gt;
@@ -28,13 +29,15 @@
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#a-simplified-model&quot;&gt;A Simplified Model&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#summary-and-conclusions&quot;&gt;Summary and Conclusions&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#summary&quot;&gt;Summary&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#conclusions&quot;&gt;Conclusions&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#the-code&quot;&gt;The Code&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;h2 id=&quot;a-nameintroductionintroductiona&quot;&gt;1. &lt;a name=&quot;introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;In baseball and other sports, we often wonder what drives player compensation. Highly-sought free agents sign record-breaking
-contracts in seemingly every off-season. Surely, we think, salaries must be based on some rational measures of productivity on the field.&lt;/p&gt;
+contracts in what seems like every off-season. Surely, we think, salaries must be based on some rational measures of productivity on the field.&lt;/p&gt;
 
 &lt;p&gt;I used regression to answer the question: What drives player salaries?  My working hypothesis is that player
 salaries are largely determined by on-field statistics, information that is available to all parties, including the player agents
@@ -44,20 +47,24 @@ salaries are largely determined by on-field statistics, information that is avai
 feature selection, reduce model complexity and prevent over-fitting. We will use these techniques to understand the
 relationship between salaries and performance on the field.&lt;/p&gt;
 
-&lt;h2 id=&quot;a-nameaboutabout-regressiona&quot;&gt;2. &lt;a name=&quot;about&quot;&gt;About Regression&lt;/a&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;a-namerequirementsrequirementsa&quot;&gt;2. &lt;a name=&quot;requirements&quot;&gt;Requirements&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;The code I will show requires Python 3, scikit-learn, pandas, numpy and statsmodels. The Anaconda distribution is recommended and can be downloaded &lt;a href=&quot;https://www.continuum.io/downloads&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;a-nameaboutabout-regressiona&quot;&gt;3. &lt;a name=&quot;about&quot;&gt;About Regression&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;Multiple regression is the most basic modeling technique for understanding the relationship between two or more variables.
 I’m going to assume familiarity with regression, but if you would like a refresher, the following is an excellent primer.
 https://www.analyticsvidhya.com/blog/2015/10/regression-python-beginners/&lt;/p&gt;
 
-&lt;h2 id=&quot;a-namethe-datathe-dataa&quot;&gt;3. &lt;a name=&quot;the-data&quot;&gt;The Data&lt;/a&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;a-namethe-datathe-dataa&quot;&gt;4. &lt;a name=&quot;the-data&quot;&gt;The Data&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;Data going back to the beginning of baseball in 1871 is available in the Lahman database. Initially, I created my own
 database by scraping data from MLB.com and USAToday.com, but later I found that data as recent as the 2015 season
 is available on Sean Lahman’s website http://www.seanlahman.com/baseball-archive/statistics/. It appears that the
 database is updated at the end of each season, as the last update was March 2016.&lt;/p&gt;
 
-&lt;h2 id=&quot;a-nameteam-winsregression-example-model-team-winsa&quot;&gt;4. &lt;a name=&quot;team-wins&quot;&gt;Regression Example: Model Team Wins&lt;/a&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;a-nameteam-winsregression-example-model-team-winsa&quot;&gt;5. &lt;a name=&quot;team-wins&quot;&gt;Regression Example: Model Team Wins&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;First, let us construct a regression model on team wins. What are the key drivers of winning in baseball?&lt;/p&gt;
 
@@ -273,7 +280,7 @@ can use regression and interpret the results.&lt;/p&gt;
 each have strengths and weaknesses. The method shown above is one method of feature selection, but we would still want to
 see how well the model generalizes to new data. For that, the cross_validation module in scikit-learn is well-suited.&lt;/p&gt;
 
-&lt;h2 id=&quot;a-nameexploring-player-salariesexploring-player-salariesa&quot;&gt;5. &lt;a name=&quot;exploring-player-salaries&quot;&gt;Exploring Player Salaries&lt;/a&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;a-nameexploring-player-salariesexploring-player-salariesa&quot;&gt;6. &lt;a name=&quot;exploring-player-salaries&quot;&gt;Exploring Player Salaries&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;If runs are the primary driver of team wins, what factors are most important when it comes to player salaries? The
 universe of possibilities is vast when it comes to predicting compensation. There are different types of players,
@@ -305,7 +312,7 @@ are other variables like the team budget. There is a wide range of payrolls by t
 
 &lt;p&gt;RBI (runs batted in) is a batting metric commonly used to measure hitting ability. FPCT (Fielding Percentage) is the ratio of put-outs and assists to total chances. These, together with IP (Innings Pitched) and G (Batting Games) appear to be positively correlated to salaries.&lt;/p&gt;
 
-&lt;h2 id=&quot;a-namemodeling-player-salariesmodeling-player-salariesa&quot;&gt;6. &lt;a name=&quot;modeling-player-salaries&quot;&gt;Modeling Player Salaries&lt;/a&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;a-namemodeling-player-salariesmodeling-player-salariesa&quot;&gt;7. &lt;a name=&quot;modeling-player-salaries&quot;&gt;Modeling Player Salaries&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;As with team wins, we will use regression to model player salaries, but I will introduce some automated techniques
 for feature selection. These techniques come in handy for highly-dimensional data and for tuning more complex models.&lt;/p&gt;
@@ -1043,7 +1050,7 @@ The best parameters are {'l1_ratio': 0.6, 'alpha': 0.001} with a score of 0.62
 
 &lt;p&gt;ElasticNet performed in-between Ridge and LASSO.&lt;/p&gt;
 
-&lt;h2 id=&quot;a-namea-simplified-modela-simplified-modela&quot;&gt;8. &lt;a name=&quot;a-simplified-model&quot;&gt;A Simplified Model&lt;/a&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;a-namea-simplified-modela-simplified-modela&quot;&gt;9. &lt;a name=&quot;a-simplified-model&quot;&gt;A Simplified Model&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;My favorite approach to this problem was simply fitting an OLS model in statsmodels and eliminating the statistically insignificant variables.&lt;/p&gt;
 
@@ -1102,19 +1109,28 @@ Warnings:
   &lt;li&gt;First and Second base players earn more on average.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;a-namesummary-and-conclusionssummary-and-conclusionsa&quot;&gt;9. &lt;a name=&quot;summary-and-conclusions&quot;&gt;Summary and Conclusions&lt;/a&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;a-namesummary-and-conclusionssummarya&quot;&gt;10. &lt;a name=&quot;summary-and-conclusions&quot;&gt;Summary&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;We looked at multiple regression for modeling a couple of interesting variables in baseball: team wins and player salaries. I showed 3 regularization techniques for performing automated feature selection during cross-validation to score model accuracy. As a result, we have a model that is more robust, parsimonious and less prone to over-fitting.&lt;/p&gt;
 
 &lt;p&gt;I also showed how feature selection could be performed by eliminating statistically insignificant variables, with similar benefits as regularization. The statsmodels package makes this very easy by producing summary output that is similar to R’s.&lt;/p&gt;
 
-&lt;p&gt;We determined that the most important drivers of baseball compensation are a handful of commonly-used metrics of batting and pitching ability, as well as the position played.&lt;/p&gt;
+&lt;h2 id=&quot;a-nameconclusionsconclusionsa&quot;&gt;11. &lt;a name=&quot;conclusions&quot;&gt;Conclusions&lt;/a&gt;&lt;/h2&gt;
 
-&lt;p&gt;Our model accuracy is not as good as the team wins model. There is a great deal of variation in player salaries, not all of which can be explained by the data. Maybe there is more data that could be added to our regression model. It’s more likely, though, that much of what drives player compensation is random chance, errors in financial judgement or bias.&lt;/p&gt;
+&lt;p&gt;The most important predictor of winning is runs.&lt;/p&gt;
 
-&lt;p&gt;Michael Lewis writes about the puzzling way that baseball scouts evaluate players in his well-known book, Moneyball. By using statistical analysis and smart management of the roster, the Oakland A’s fielded a winning team despite having one of the lowest payrolls in major league baseball. One of the book’s key insights is that hitting skill is overvalued. This is consistent with our simplified model, in which TB (Total Bases) is an important component.&lt;/p&gt;
+&lt;p&gt;The most important drivers of baseball compensation include a few commonly-used metrics of batting and pitching ability, the number of all-star appearances, and fielding position.&lt;/p&gt;
 
-&lt;p&gt;The ability to get on base is what’s important – whether that is accomplished by walks or hits. By recruiting players with high OBP (on-base percentage) and OK hitting skills, salaries can be minimized while achieving good numbers of runs. Runs – not hits – is the critical driver for winning, as we showed in the Team Wins model.&lt;/p&gt;
+&lt;p&gt;The salaries model is not as accurate as the team wins model. There is a great deal of variation in player salaries, not all of which can be explained by the data. Maybe there is more data that could be added to our regression model. It’s more likely, though, that much of what drives player compensation is random chance, errors in financial judgement and bias.&lt;/p&gt;
+
+&lt;p&gt;In &lt;a href=&quot;https://www.amazon.com/Moneyball-Art-Winning-Unfair-Game/dp/0393324818&quot;&gt;Moneyball&lt;/a&gt;, Michael Lewis writes about the puzzling way that baseball scouts evaluate players. By using statistical analysis and smart management of the roster, the Oakland A’s fielded a winning team despite having one of the lowest payrolls in major league baseball. One of the book’s key insights is that hitting skill is overvalued. This is consistent with our salaries model, of which TB (Total Bases) is an important component.&lt;/p&gt;
+
+&lt;p&gt;When it comes to winning, the ability to get on base is what’s important – whether that is accomplished by walks or hits. By recruiting players with high OBP (on-base percentage) and OK hitting skills, salaries can be minimized while achieving good numbers of runs. Runs – not hits – is the critical driver for winning.&lt;/p&gt;
+
+&lt;h1 id=&quot;a-namethe-codethe-codea&quot;&gt;12. &lt;a name=&quot;the-code&quot;&gt;The Code&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;The code can be found &lt;a href=&quot;https://github.com/natereed/predicting-team-wins-and-player-salaries&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
 </description>
         <pubDate>Tue, 01 Nov 2016 00:00:00 -0500</pubDate>
         <link>http://localhost:4000/using-regression-to-predict-baseball-salaries/</link>
