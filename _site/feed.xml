@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 02 Nov 2016 11:43:30 -0500</pubDate>
-    <lastBuildDate>Wed, 02 Nov 2016 11:43:30 -0500</lastBuildDate>
+    <pubDate>Fri, 04 Nov 2016 10:37:58 -0500</pubDate>
+    <lastBuildDate>Fri, 04 Nov 2016 10:37:58 -0500</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -19,14 +19,20 @@
   &lt;li&gt;Regression Example: Model Team Wins&lt;/li&gt;
   &lt;li&gt;Exploring Player Salaries&lt;/li&gt;
   &lt;li&gt;Modeling Player Salaries&lt;/li&gt;
-  &lt;li&gt;Regularization&lt;/li&gt;
-  &lt;li&gt;Conclusions&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#regularization&quot;&gt;Regularization&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;a. Ridge&lt;/li&gt;
+      &lt;li&gt;b. LASSO&lt;/li&gt;
+      &lt;li&gt;c. ElasticNet&lt;/li&gt;
+      &lt;li&gt;d. Findings&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;h2 id=&quot;introduction&quot;&gt;1. Introduction&lt;/h2&gt;
 
-&lt;p&gt;In baseball and other sports, we often wonder what drives player compensation. Highly-sought free agents seem to sign record-breaking
-contracts every year. Surely, we think, salaries must be based on some rational measures of productivity on the field.&lt;/p&gt;
+&lt;p&gt;In baseball and other sports, we often wonder what drives player compensation. Highly-sought free agents sign record-breaking
+contracts in seemingly every off-season. Surely, we think, salaries must be based on some rational measures of productivity on the field.&lt;/p&gt;
 
 &lt;p&gt;I used regression to answer the question: What drives player salaries?  My working hypothesis is that player
 salaries are largely determined by on-field statistics, information that is available to all parties, including the player agents
@@ -312,6 +318,391 @@ the previous year of play.&lt;/p&gt;
 
 &lt;p&gt;The full data pipeline is documented in the github repo.&lt;/p&gt;
 
+&lt;p&gt;In my iPython notebook, I show the inspect the first few rows as follows:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read_csv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;data&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;db&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Observations.csv&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;pre&gt;
+&lt;table border=&quot;1&quot; class=&quot;dataframe&quot;&gt;
+  &lt;thead&gt;
+    &lt;tr style=&quot;text-align: right;&quot;&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;Player Id&lt;/th&gt;
+      &lt;th&gt;Salary Year&lt;/th&gt;
+      &lt;th&gt;Annual Salary&lt;/th&gt;
+      &lt;th&gt;Salary Team&lt;/th&gt;
+      &lt;th&gt;Batting_2B.Year-1&lt;/th&gt;
+      &lt;th&gt;Batting_3B.Year-1&lt;/th&gt;
+      &lt;th&gt;Batting_AB.Year-1&lt;/th&gt;
+      &lt;th&gt;Batting_AVG.Year-1&lt;/th&gt;
+      &lt;th&gt;Batting_BB.Year-1&lt;/th&gt;
+      &lt;th&gt;Batting_CS.Year-1&lt;/th&gt;
+      &lt;th&gt;...&lt;/th&gt;
+      &lt;th&gt;Pitching_SHO.Year-1&lt;/th&gt;
+      &lt;th&gt;Pitching_SO.Year-1&lt;/th&gt;
+      &lt;th&gt;Pitching_SV.Year-1&lt;/th&gt;
+      &lt;th&gt;Pitching_W.Year-1&lt;/th&gt;
+      &lt;th&gt;Pitching_WP.Year-1&lt;/th&gt;
+      &lt;th&gt;Player Id.1&lt;/th&gt;
+      &lt;th&gt;teamID 1.Year-1&lt;/th&gt;
+      &lt;th&gt;teamID 2.Year-1&lt;/th&gt;
+      &lt;th&gt;teamID 3.Year-1&lt;/th&gt;
+      &lt;th&gt;teamID 4.Year-1&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;0&lt;/th&gt;
+      &lt;td&gt;blanche01&lt;/td&gt;
+      &lt;td&gt;2011&lt;/td&gt;
+      &lt;td&gt;1000000&lt;/td&gt;
+      &lt;td&gt;ARI&lt;/td&gt;
+      &lt;td&gt;5.0&lt;/td&gt;
+      &lt;td&gt;0.0&lt;/td&gt;
+      &lt;td&gt;130.0&lt;/td&gt;
+      &lt;td&gt;0.215385&lt;/td&gt;
+      &lt;td&gt;11.0&lt;/td&gt;
+      &lt;td&gt;0.0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;blanche01&lt;/td&gt;
+      &lt;td&gt;NYN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;1&lt;/th&gt;
+      &lt;td&gt;bloomwi01&lt;/td&gt;
+      &lt;td&gt;2011&lt;/td&gt;
+      &lt;td&gt;900000&lt;/td&gt;
+      &lt;td&gt;ARI&lt;/td&gt;
+      &lt;td&gt;10.0&lt;/td&gt;
+      &lt;td&gt;1.0&lt;/td&gt;
+      &lt;td&gt;187.0&lt;/td&gt;
+      &lt;td&gt;0.267380&lt;/td&gt;
+      &lt;td&gt;9.0&lt;/td&gt;
+      &lt;td&gt;5.0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;bloomwi01&lt;/td&gt;
+      &lt;td&gt;CIN&lt;/td&gt;
+      &lt;td&gt;KCA&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2&lt;/th&gt;
+      &lt;td&gt;blumge01&lt;/td&gt;
+      &lt;td&gt;2011&lt;/td&gt;
+      &lt;td&gt;1350000&lt;/td&gt;
+      &lt;td&gt;ARI&lt;/td&gt;
+      &lt;td&gt;10.0&lt;/td&gt;
+      &lt;td&gt;1.0&lt;/td&gt;
+      &lt;td&gt;202.0&lt;/td&gt;
+      &lt;td&gt;0.267327&lt;/td&gt;
+      &lt;td&gt;15.0&lt;/td&gt;
+      &lt;td&gt;0.0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;blumge01&lt;/td&gt;
+      &lt;td&gt;HOU&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;3&lt;/th&gt;
+      &lt;td&gt;branyru01&lt;/td&gt;
+      &lt;td&gt;2011&lt;/td&gt;
+      &lt;td&gt;1000000&lt;/td&gt;
+      &lt;td&gt;ARI&lt;/td&gt;
+      &lt;td&gt;19.0&lt;/td&gt;
+      &lt;td&gt;0.0&lt;/td&gt;
+      &lt;td&gt;376.0&lt;/td&gt;
+      &lt;td&gt;0.236702&lt;/td&gt;
+      &lt;td&gt;46.0&lt;/td&gt;
+      &lt;td&gt;0.0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;branyru01&lt;/td&gt;
+      &lt;td&gt;SEA&lt;/td&gt;
+      &lt;td&gt;CLE&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;4&lt;/th&gt;
+      &lt;td&gt;demelsa01&lt;/td&gt;
+      &lt;td&gt;2011&lt;/td&gt;
+      &lt;td&gt;417000&lt;/td&gt;
+      &lt;td&gt;ARI&lt;/td&gt;
+      &lt;td&gt;0.0&lt;/td&gt;
+      &lt;td&gt;0.0&lt;/td&gt;
+      &lt;td&gt;0.0&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;0.0&lt;/td&gt;
+      &lt;td&gt;0.0&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0.0&lt;/td&gt;
+      &lt;td&gt;33.0&lt;/td&gt;
+      &lt;td&gt;2.0&lt;/td&gt;
+      &lt;td&gt;2.0&lt;/td&gt;
+      &lt;td&gt;5.0&lt;/td&gt;
+      &lt;td&gt;demelsa01&lt;/td&gt;
+      &lt;td&gt;ARI&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/pre&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;describe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;pre&gt;
+&lt;table border=&quot;1&quot; class=&quot;dataframe&quot;&gt;
+  &lt;thead&gt;
+    &lt;tr style=&quot;text-align: right;&quot;&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;Salary Year&lt;/th&gt;
+      &lt;th&gt;Annual Salary&lt;/th&gt;
+      &lt;th&gt;Batting_2B.Year-1&lt;/th&gt;
+      &lt;th&gt;Batting_3B.Year-1&lt;/th&gt;
+      &lt;th&gt;Batting_AB.Year-1&lt;/th&gt;
+      &lt;th&gt;Batting_AVG.Year-1&lt;/th&gt;
+      &lt;th&gt;Batting_BB.Year-1&lt;/th&gt;
+      &lt;th&gt;Batting_CS.Year-1&lt;/th&gt;
+      &lt;th&gt;Batting_Career_2B&lt;/th&gt;
+      &lt;th&gt;Batting_Career_3B&lt;/th&gt;
+      &lt;th&gt;...&lt;/th&gt;
+      &lt;th&gt;Pitching_IPouts.Year-1&lt;/th&gt;
+      &lt;th&gt;Pitching_L.Year-1&lt;/th&gt;
+      &lt;th&gt;Pitching_R.Year-1&lt;/th&gt;
+      &lt;th&gt;Pitching_SF.Year-1&lt;/th&gt;
+      &lt;th&gt;Pitching_SH.Year-1&lt;/th&gt;
+      &lt;th&gt;Pitching_SHO.Year-1&lt;/th&gt;
+      &lt;th&gt;Pitching_SO.Year-1&lt;/th&gt;
+      &lt;th&gt;Pitching_SV.Year-1&lt;/th&gt;
+      &lt;th&gt;Pitching_W.Year-1&lt;/th&gt;
+      &lt;th&gt;Pitching_WP.Year-1&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;count&lt;/th&gt;
+      &lt;td&gt;4043.000000&lt;/td&gt;
+      &lt;td&gt;4.043000e+03&lt;/td&gt;
+      &lt;td&gt;3942.000000&lt;/td&gt;
+      &lt;td&gt;3942.000000&lt;/td&gt;
+      &lt;td&gt;3942.000000&lt;/td&gt;
+      &lt;td&gt;3073.000000&lt;/td&gt;
+      &lt;td&gt;3942.000000&lt;/td&gt;
+      &lt;td&gt;3942.000000&lt;/td&gt;
+      &lt;td&gt;4043.000000&lt;/td&gt;
+      &lt;td&gt;4043.000000&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;1928.000000&lt;/td&gt;
+      &lt;td&gt;1928.000000&lt;/td&gt;
+      &lt;td&gt;1928.000000&lt;/td&gt;
+      &lt;td&gt;1928.000000&lt;/td&gt;
+      &lt;td&gt;1928.000000&lt;/td&gt;
+      &lt;td&gt;1928.000000&lt;/td&gt;
+      &lt;td&gt;1928.000000&lt;/td&gt;
+      &lt;td&gt;1928.000000&lt;/td&gt;
+      &lt;td&gt;1928.000000&lt;/td&gt;
+      &lt;td&gt;1928.000000&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;mean&lt;/th&gt;
+      &lt;td&gt;2012.987880&lt;/td&gt;
+      &lt;td&gt;3.783100e+06&lt;/td&gt;
+      &lt;td&gt;9.335363&lt;/td&gt;
+      &lt;td&gt;0.965246&lt;/td&gt;
+      &lt;td&gt;180.968037&lt;/td&gt;
+      &lt;td&gt;0.205732&lt;/td&gt;
+      &lt;td&gt;16.521309&lt;/td&gt;
+      &lt;td&gt;1.239472&lt;/td&gt;
+      &lt;td&gt;58.042048&lt;/td&gt;
+      &lt;td&gt;6.523126&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;269.243776&lt;/td&gt;
+      &lt;td&gt;4.832988&lt;/td&gt;
+      &lt;td&gt;39.820021&lt;/td&gt;
+      &lt;td&gt;2.428942&lt;/td&gt;
+      &lt;td&gt;2.985996&lt;/td&gt;
+      &lt;td&gt;0.150934&lt;/td&gt;
+      &lt;td&gt;75.958506&lt;/td&gt;
+      &lt;td&gt;2.991701&lt;/td&gt;
+      &lt;td&gt;5.311203&lt;/td&gt;
+      &lt;td&gt;3.258299&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;std&lt;/th&gt;
+      &lt;td&gt;1.417743&lt;/td&gt;
+      &lt;td&gt;5.008263e+06&lt;/td&gt;
+      &lt;td&gt;12.061593&lt;/td&gt;
+      &lt;td&gt;1.888294&lt;/td&gt;
+      &lt;td&gt;211.187452&lt;/td&gt;
+      &lt;td&gt;0.120388&lt;/td&gt;
+      &lt;td&gt;22.446631&lt;/td&gt;
+      &lt;td&gt;2.409485&lt;/td&gt;
+      &lt;td&gt;98.862958&lt;/td&gt;
+      &lt;td&gt;13.221541&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;196.661333&lt;/td&gt;
+      &lt;td&gt;4.064620&lt;/td&gt;
+      &lt;td&gt;31.519374&lt;/td&gt;
+      &lt;td&gt;2.299598&lt;/td&gt;
+      &lt;td&gt;3.024088&lt;/td&gt;
+      &lt;td&gt;0.492327&lt;/td&gt;
+      &lt;td&gt;55.558366&lt;/td&gt;
+      &lt;td&gt;8.758179&lt;/td&gt;
+      &lt;td&gt;4.788591&lt;/td&gt;
+      &lt;td&gt;3.140324&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;min&lt;/th&gt;
+      &lt;td&gt;2011.000000&lt;/td&gt;
+      &lt;td&gt;4.140000e+05&lt;/td&gt;
+      &lt;td&gt;0.000000&lt;/td&gt;
+      &lt;td&gt;0.000000&lt;/td&gt;
+      &lt;td&gt;0.000000&lt;/td&gt;
+      &lt;td&gt;0.000000&lt;/td&gt;
+      &lt;td&gt;0.000000&lt;/td&gt;
+      &lt;td&gt;0.000000&lt;/td&gt;
+      &lt;td&gt;0.000000&lt;/td&gt;
+      &lt;td&gt;0.000000&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;0.000000&lt;/td&gt;
+      &lt;td&gt;0.000000&lt;/td&gt;
+      &lt;td&gt;0.000000&lt;/td&gt;
+      &lt;td&gt;0.000000&lt;/td&gt;
+      &lt;td&gt;0.000000&lt;/td&gt;
+      &lt;td&gt;0.000000&lt;/td&gt;
+      &lt;td&gt;0.000000&lt;/td&gt;
+      &lt;td&gt;0.000000&lt;/td&gt;
+      &lt;td&gt;0.000000&lt;/td&gt;
+      &lt;td&gt;0.000000&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;25%&lt;/th&gt;
+      &lt;td&gt;2012.000000&lt;/td&gt;
+      &lt;td&gt;5.085000e+05&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;0.000000&lt;/td&gt;
+      &lt;td&gt;0.000000&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;50%&lt;/th&gt;
+      &lt;td&gt;2013.000000&lt;/td&gt;
+      &lt;td&gt;1.400000e+06&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;6.000000&lt;/td&gt;
+      &lt;td&gt;0.000000&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;75%&lt;/th&gt;
+      &lt;td&gt;2014.000000&lt;/td&gt;
+      &lt;td&gt;5.000000e+06&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;77.000000&lt;/td&gt;
+      &lt;td&gt;8.000000&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+      &lt;td&gt;NaN&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;max&lt;/th&gt;
+      &lt;td&gt;2015.000000&lt;/td&gt;
+      &lt;td&gt;3.257100e+07&lt;/td&gt;
+      &lt;td&gt;55.000000&lt;/td&gt;
+      &lt;td&gt;16.000000&lt;/td&gt;
+      &lt;td&gt;684.000000&lt;/td&gt;
+      &lt;td&gt;1.000000&lt;/td&gt;
+      &lt;td&gt;135.000000&lt;/td&gt;
+      &lt;td&gt;23.000000&lt;/td&gt;
+      &lt;td&gt;570.000000&lt;/td&gt;
+      &lt;td&gt;120.000000&lt;/td&gt;
+      &lt;td&gt;...&lt;/td&gt;
+      &lt;td&gt;753.000000&lt;/td&gt;
+      &lt;td&gt;18.000000&lt;/td&gt;
+      &lt;td&gt;128.000000&lt;/td&gt;
+      &lt;td&gt;12.000000&lt;/td&gt;
+      &lt;td&gt;19.000000&lt;/td&gt;
+      &lt;td&gt;6.000000&lt;/td&gt;
+      &lt;td&gt;277.000000&lt;/td&gt;
+      &lt;td&gt;51.000000&lt;/td&gt;
+      &lt;td&gt;24.000000&lt;/td&gt;
+      &lt;td&gt;25.000000&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/pre&gt;
+
 &lt;h3 id=&quot;cleaning&quot;&gt;Cleaning&lt;/h3&gt;
 
 &lt;p&gt;My initial code for cleaning the input was quite involved, due to the fact that data was coming from scraped websites,
@@ -411,7 +802,7 @@ as accurate as the Team Wins model we developed above.&lt;/p&gt;
 
 &lt;p&gt;Besides the approach we showed in part one, a well-known approach to reducing model complexity is Regularization. I encourage you to read the tutorial linked here for understanding and motivation for Regularization, if you need an introduction or refresher.&lt;/p&gt;
 
-&lt;h2 id=&quot;regularization&quot;&gt;Regularization&lt;/h2&gt;
+&lt;h2 id=&quot;a-nameregularizationregularizationa&quot;&gt;&lt;a name=&quot;regularization&quot;&gt;Regularization&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;There are two types of regularization for regression problems, and one which combines them:&lt;/p&gt;
 
@@ -433,6 +824,10 @@ L2 minimization objective = LS Obj + α * (sum of square of coefficients)
 &lt;/div&gt;
 
 &lt;p&gt;The effect of regularization is to shrink or eliminate coefficients. Note that Ridge regression will retain all variables, while LASSO will eliminate variables. ElasticNet will achieve results in-between these approaches, as it performs a combination of L1 and L2 regularization.&lt;/p&gt;
+
+&lt;p&gt;As you can see, the effect of L1 and L2 depend greatly on the value of alpha. If alpha is zero, then L1 and L2 will perform exactly as Ordinary Least Sequares.&lt;/p&gt;
+
+&lt;p&gt;We’ll use GridSearchCV to perform K-fold cross-validation and look for the optimal value of alpha, and in the case of ElasticNet the l1/l2 ratio. Each time GridSearchCV tries a value of alpha that does not converge, we get some warnings: “ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations. Fitting data with very small alpha may cause precision problems.” I omitted these from the output below. In each case, we were able to find a value of alpha that did converge.&lt;/p&gt;
 
 &lt;h3 id=&quot;ridge-regression&quot;&gt;Ridge Regression&lt;/h3&gt;
 
@@ -565,6 +960,139 @@ L2 minimization objective = LS Obj + α * (sum of square of coefficients)
 &lt;p&gt;&lt;em&gt;25 variables selected.&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;Nice! Many of the 38 variables we originally used were eliminated.&lt;/p&gt;
+
+&lt;h3 id=&quot;elasticnet&quot;&gt;ElasticNet&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;linear_model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ElasticNet&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'alpha'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;alpha_lasso&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;'l1_ratio'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]}&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GridSearchCV&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cv&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GroupKFold&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_splits&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;groups&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;The best parameters are &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s with a score of &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%0.2&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;f&quot;&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;best_params_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;best_score_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;pre&gt;
+The best parameters are {'l1_ratio': 0.6, 'alpha': 0.001} with a score of 0.62
+&lt;/pre&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;linear_model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ElasticNet&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;alpha&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.001&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l1_ratio&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;groups&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;en_coefficients&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;col&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;enumerate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;columns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;en_coefficients&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;col&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;coef_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;pre&gt;
+{'0.0': -0.3047726423733812,
+ '1B': 0.25748750699647138,
+ '2B': 0.35889132154662995,
+ '3B': -0.14988674024090118,
+ 'Adjusted Team Payroll': 0.54625359519308125,
+ 'Batting_Career_2B': 0.84243456942856298,
+ 'Batting_Career_3B': 0.59913899613210242,
+ 'Batting_Career_AVG': -0.35894026434519272,
+ 'Batting_Career_G': -0.14729811028642528,
+ 'Batting_Career_H': 0.0,
+ 'Batting_Career_HR': 0.78105719697275222,
+ 'Batting_Career_Num_Seasons': -1.1793233106665073,
+ 'Batting_Career_OBP': 0.0,
+ 'Batting_Career_PSN': 0.52551886237215906,
+ 'Batting_Career_R': -0.0,
+ 'Batting_Career_RBI': 0.61225141161728402,
+ 'Batting_Career_SB': -0.17972207609872703,
+ 'Batting_Career_SLG': 1.1473103292071138,
+ 'Batting_Career_TB': 0.69807716951694032,
+ 'C': 0.0,
+ 'Fielding_Career_A': -0.0,
+ 'Fielding_Career_E': 0.071400782449289851,
+ 'Fielding_Career_FPCT': 0.0,
+ 'Fielding_Career_G': 1.1490235733182153,
+ 'Fielding_Career_PO': 0.17053361139204987,
+ 'Fielding_G': 0.0,
+ 'Fielding_Num_Seasons': 0.0,
+ 'MULTIPLE': -0.015179815039546003,
+ 'Num_All_Star_Appearances': 2.9585877533978362,
+ 'Num_Post_Season_Appearances': 0.22848002839269588,
+ 'P': -0.021741654556822559,
+ 'Pitching_Career_ER': -0.38322604452848602,
+ 'Pitching_Career_ERA': -0.011391062162622766,
+ 'Pitching_Career_GS': 0.0,
+ 'Pitching_Career_IP': 0.0,
+ 'Pitching_Career_L': -0.0,
+ 'Pitching_Career_Num_Seasons': -0.0,
+ 'Pitching_Career_SO': 4.2715317739655374,
+ 'Pitching_Career_W': 0.68767296740585693,
+ 'SS': 0.11953849226009178}
+&lt;/pre&gt;
+
+&lt;h3 id=&quot;findings&quot;&gt;Findings&lt;/h3&gt;
+
+&lt;p&gt;Ridge regression did not eliminate any coefficients, as expected. Nor did the accuracy of the model change much.&lt;/p&gt;
+
+&lt;p&gt;LASSO did the best job at simplifying the model, as it selected the fewest variables. The accuracy was slightly reduced, but it is close. If we were concerned about how this model would perform on new data, this tradeoff might be attractive.&lt;/p&gt;
+
+&lt;p&gt;This is also a benefit in computationally expensive problems where there are a lot of data points – perhaps millions of variables.&lt;/p&gt;
+
+&lt;p&gt;ElasticNet performed in-between Ridge and LASSO.&lt;/p&gt;
+
+&lt;h2 id=&quot;a-simplified-model&quot;&gt;A Simplified Model&lt;/h2&gt;
+
+&lt;p&gt;My favorite approach to this problem was simply fitting an OLS model in statsmodels and eliminating the statistically insignificant variables.&lt;/p&gt;
+
+&lt;p&gt;This is what I came up with:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;X&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dmatrices&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Adjusted_Salary ~ Batting_Career_TB'&lt;/span&gt;\
+                 &lt;span class=&quot;s&quot;&gt;'+ Pitching_Career_IP + Pitching_Career_SO '&lt;/span&gt;\
+                 &lt;span class=&quot;s&quot;&gt;'+ Num_All_Star_Appearances '&lt;/span&gt;\
+                 &lt;span class=&quot;s&quot;&gt;'+ NO_POSITION + FIRST_BASE + SECOND_BASE'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;return_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'dataframe'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;mod&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sm&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OLS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;res&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;  
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;summary&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;pre&gt;
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:        Adjusted_Salary   R-squared:                       0.501
+Model:                            OLS   Adj. R-squared:                  0.501
+Method:                 Least Squares   F-statistic:                     3472.
+Date:                Tue, 01 Nov 2016   Prob (F-statistic):               0.00
+Time:                        09:30:19   Log-Likelihood:                -31318.
+No. Observations:               24188   AIC:                         6.265e+04
+Df Residuals:                   24180   BIC:                         6.272e+04
+Df Model:                           7                                         
+Covariance Type:            nonrobust                                         
+============================================================================================
+                               coef    std err          t      P&amp;gt;|t|      [95.0% Conf. Int.]
+--------------------------------------------------------------------------------------------
+Intercept                    0.2996      0.008     37.092      0.000         0.284     0.315
+Batting_Career_TB            4.3374      0.064     67.495      0.000         4.211     4.463
+Pitching_Career_IP          -0.5935      0.228     -2.598      0.009        -1.041    -0.146
+Pitching_Career_SO           8.2155      0.339     24.215      0.000         7.551     8.881
+Num_All_Star_Appearances     2.6404      0.096     27.630      0.000         2.453     2.828
+NO_POSITION                 -0.2963      0.030     -9.767      0.000        -0.356    -0.237
+FIRST_BASE                   0.3226      0.034      9.408      0.000         0.255     0.390
+SECOND_BASE                  0.0881      0.040      2.210      0.027         0.010     0.166
+==============================================================================
+Omnibus:                     4686.175   Durbin-Watson:                   1.946
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):            50380.234
+Skew:                           0.620   Prob(JB):                         0.00
+Kurtosis:                       9.961   Cond. No.                         72.0
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+&lt;/pre&gt;
+
+&lt;p&gt;I like the OLS summary from statsmodels because it’s very easy to interpret:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Total Bases is the most important batting statistic. Players are paid for their ability to hit.&lt;/li&gt;
+  &lt;li&gt;Strikeouts is the most important metric for pitchers.&lt;/li&gt;
+  &lt;li&gt;Innings Pitched is negatively correlated with salaries because the rate of strike-outs is lower for a pitcher with more innings pitched.&lt;/li&gt;
+  &lt;li&gt;Players with more All-Star Appearances are paid proportionally more based on the number of games they apppeared in.&lt;/li&gt;
+  &lt;li&gt;NO_POSITION: This might require further investigation, but I suspect this refers to designated hitters. They would play no fielding position. On average, they earn less, hence the negative correlation.&lt;/li&gt;
+  &lt;li&gt;First and Second base players earn more on average.&lt;/li&gt;
+&lt;/ul&gt;
 
 </description>
         <pubDate>Tue, 01 Nov 2016 00:00:00 -0500</pubDate>

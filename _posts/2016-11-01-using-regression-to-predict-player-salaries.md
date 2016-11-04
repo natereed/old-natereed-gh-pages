@@ -10,13 +10,16 @@ permalink: /using-regression-to-predict-team-wins/
 4. Regression Example: Model Team Wins
 5. Exploring Player Salaries
 6. Modeling Player Salaries
-7. Regularization
-8. Conclusions
+7. [Regularization](#regularization)
+* a. Ridge
+* b. LASSO
+* c. ElasticNet
+* d. Findings
 
 ## 1. Introduction
 
-In baseball and other sports, we often wonder what drives player compensation. Highly-sought free agents seem to sign record-breaking
-contracts every year. Surely, we think, salaries must be based on some rational measures of productivity on the field.
+In baseball and other sports, we often wonder what drives player compensation. Highly-sought free agents sign record-breaking
+contracts in seemingly every off-season. Surely, we think, salaries must be based on some rational measures of productivity on the field.
 
 I used regression to answer the question: What drives player salaries?  My working hypothesis is that player
 salaries are largely determined by on-field statistics, information that is available to all parties, including the player agents
@@ -314,6 +317,395 @@ the previous year of play.
 
 The full data pipeline is documented in the github repo.
 
+In my iPython notebook, I show the inspect the first few rows as follows:
+
+{% highlight python %}
+df = pd.read_csv(os.path.join("data", "db", "Observations.csv"))
+df.head()
+{% endhighlight %}
+
+<pre>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Player Id</th>
+      <th>Salary Year</th>
+      <th>Annual Salary</th>
+      <th>Salary Team</th>
+      <th>Batting_2B.Year-1</th>
+      <th>Batting_3B.Year-1</th>
+      <th>Batting_AB.Year-1</th>
+      <th>Batting_AVG.Year-1</th>
+      <th>Batting_BB.Year-1</th>
+      <th>Batting_CS.Year-1</th>
+      <th>...</th>
+      <th>Pitching_SHO.Year-1</th>
+      <th>Pitching_SO.Year-1</th>
+      <th>Pitching_SV.Year-1</th>
+      <th>Pitching_W.Year-1</th>
+      <th>Pitching_WP.Year-1</th>
+      <th>Player Id.1</th>
+      <th>teamID 1.Year-1</th>
+      <th>teamID 2.Year-1</th>
+      <th>teamID 3.Year-1</th>
+      <th>teamID 4.Year-1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>blanche01</td>
+      <td>2011</td>
+      <td>1000000</td>
+      <td>ARI</td>
+      <td>5.0</td>
+      <td>0.0</td>
+      <td>130.0</td>
+      <td>0.215385</td>
+      <td>11.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>blanche01</td>
+      <td>NYN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>bloomwi01</td>
+      <td>2011</td>
+      <td>900000</td>
+      <td>ARI</td>
+      <td>10.0</td>
+      <td>1.0</td>
+      <td>187.0</td>
+      <td>0.267380</td>
+      <td>9.0</td>
+      <td>5.0</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>bloomwi01</td>
+      <td>CIN</td>
+      <td>KCA</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>blumge01</td>
+      <td>2011</td>
+      <td>1350000</td>
+      <td>ARI</td>
+      <td>10.0</td>
+      <td>1.0</td>
+      <td>202.0</td>
+      <td>0.267327</td>
+      <td>15.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>blumge01</td>
+      <td>HOU</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>branyru01</td>
+      <td>2011</td>
+      <td>1000000</td>
+      <td>ARI</td>
+      <td>19.0</td>
+      <td>0.0</td>
+      <td>376.0</td>
+      <td>0.236702</td>
+      <td>46.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>branyru01</td>
+      <td>SEA</td>
+      <td>CLE</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>demelsa01</td>
+      <td>2011</td>
+      <td>417000</td>
+      <td>ARI</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>33.0</td>
+      <td>2.0</td>
+      <td>2.0</td>
+      <td>5.0</td>
+      <td>demelsa01</td>
+      <td>ARI</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</pre>
+
+{% highlight python %}
+df.describe()
+{% endhighlight %}
+
+<pre>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Salary Year</th>
+      <th>Annual Salary</th>
+      <th>Batting_2B.Year-1</th>
+      <th>Batting_3B.Year-1</th>
+      <th>Batting_AB.Year-1</th>
+      <th>Batting_AVG.Year-1</th>
+      <th>Batting_BB.Year-1</th>
+      <th>Batting_CS.Year-1</th>
+      <th>Batting_Career_2B</th>
+      <th>Batting_Career_3B</th>
+      <th>...</th>
+      <th>Pitching_IPouts.Year-1</th>
+      <th>Pitching_L.Year-1</th>
+      <th>Pitching_R.Year-1</th>
+      <th>Pitching_SF.Year-1</th>
+      <th>Pitching_SH.Year-1</th>
+      <th>Pitching_SHO.Year-1</th>
+      <th>Pitching_SO.Year-1</th>
+      <th>Pitching_SV.Year-1</th>
+      <th>Pitching_W.Year-1</th>
+      <th>Pitching_WP.Year-1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>4043.000000</td>
+      <td>4.043000e+03</td>
+      <td>3942.000000</td>
+      <td>3942.000000</td>
+      <td>3942.000000</td>
+      <td>3073.000000</td>
+      <td>3942.000000</td>
+      <td>3942.000000</td>
+      <td>4043.000000</td>
+      <td>4043.000000</td>
+      <td>...</td>
+      <td>1928.000000</td>
+      <td>1928.000000</td>
+      <td>1928.000000</td>
+      <td>1928.000000</td>
+      <td>1928.000000</td>
+      <td>1928.000000</td>
+      <td>1928.000000</td>
+      <td>1928.000000</td>
+      <td>1928.000000</td>
+      <td>1928.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>2012.987880</td>
+      <td>3.783100e+06</td>
+      <td>9.335363</td>
+      <td>0.965246</td>
+      <td>180.968037</td>
+      <td>0.205732</td>
+      <td>16.521309</td>
+      <td>1.239472</td>
+      <td>58.042048</td>
+      <td>6.523126</td>
+      <td>...</td>
+      <td>269.243776</td>
+      <td>4.832988</td>
+      <td>39.820021</td>
+      <td>2.428942</td>
+      <td>2.985996</td>
+      <td>0.150934</td>
+      <td>75.958506</td>
+      <td>2.991701</td>
+      <td>5.311203</td>
+      <td>3.258299</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>1.417743</td>
+      <td>5.008263e+06</td>
+      <td>12.061593</td>
+      <td>1.888294</td>
+      <td>211.187452</td>
+      <td>0.120388</td>
+      <td>22.446631</td>
+      <td>2.409485</td>
+      <td>98.862958</td>
+      <td>13.221541</td>
+      <td>...</td>
+      <td>196.661333</td>
+      <td>4.064620</td>
+      <td>31.519374</td>
+      <td>2.299598</td>
+      <td>3.024088</td>
+      <td>0.492327</td>
+      <td>55.558366</td>
+      <td>8.758179</td>
+      <td>4.788591</td>
+      <td>3.140324</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>2011.000000</td>
+      <td>4.140000e+05</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>2012.000000</td>
+      <td>5.085000e+05</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>2013.000000</td>
+      <td>1.400000e+06</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>6.000000</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>2014.000000</td>
+      <td>5.000000e+06</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>77.000000</td>
+      <td>8.000000</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>2015.000000</td>
+      <td>3.257100e+07</td>
+      <td>55.000000</td>
+      <td>16.000000</td>
+      <td>684.000000</td>
+      <td>1.000000</td>
+      <td>135.000000</td>
+      <td>23.000000</td>
+      <td>570.000000</td>
+      <td>120.000000</td>
+      <td>...</td>
+      <td>753.000000</td>
+      <td>18.000000</td>
+      <td>128.000000</td>
+      <td>12.000000</td>
+      <td>19.000000</td>
+      <td>6.000000</td>
+      <td>277.000000</td>
+      <td>51.000000</td>
+      <td>24.000000</td>
+      <td>25.000000</td>
+    </tr>
+  </tbody>
+</table>
+</pre>
+
 ### Cleaning
 
 My initial code for cleaning the input was quite involved, due to the fact that data was coming from scraped websites,
@@ -411,7 +803,7 @@ As we discussed in the first part on Team Wins, too many features can make the m
 
 Besides the approach we showed in part one, a well-known approach to reducing model complexity is Regularization. I encourage you to read the tutorial linked here for understanding and motivation for Regularization, if you need an introduction or refresher.
 
-## Regularization
+## <a name="regularization">Regularization</a>
 
 There are two types of regularization for regression problems, and one which combines them:
 
@@ -429,6 +821,10 @@ The equations for L1 and L2 include the parameter alpha:
     L2 minimization objective = LS Obj + α * (sum of square of coefficients)
 
 The effect of regularization is to shrink or eliminate coefficients. Note that Ridge regression will retain all variables, while LASSO will eliminate variables. ElasticNet will achieve results in-between these approaches, as it performs a combination of L1 and L2 regularization.
+
+As you can see, the effect of L1 and L2 depend greatly on the value of alpha. If alpha is zero, then L1 and L2 will perform exactly as Ordinary Least Sequares. 
+
+We'll use GridSearchCV to perform K-fold cross-validation and look for the optimal value of alpha, and in the case of ElasticNet the l1/l2 ratio. Each time GridSearchCV tries a value of alpha that does not converge, we get some warnings: "ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations. Fitting data with very small alpha may cause precision problems." I omitted these from the output below. In each case, we were able to find a value of alpha that did converge.
 
 ### Ridge Regression
 
@@ -571,4 +967,139 @@ print("{} variables selected.".format(sum([lasso_coefficients[var] != 0 for var 
 *25 variables selected.*
 
 Nice! Many of the 38 variables we originally used were eliminated. 
+
+### ElasticNet 
+
+{% highlight python %}
+regr = linear_model.ElasticNet()
+grid = {'alpha' : alpha_lasso,
+        'l1_ratio' : [i / 10 for i in range(10+1)]}
+regr = GridSearchCV(regr, grid, cv=GroupKFold(n_splits=5))
+regr.fit(X, y, groups)
+
+print("The best parameters are %s with a score of %0.2f"
+      % (regr.best_params_, regr.best_score_))
+{% endhighlight %}
+
+<pre>
+The best parameters are {'l1_ratio': 0.6, 'alpha': 0.001} with a score of 0.62
+</pre>
+
+{% highlight python %}
+regr = linear_model.ElasticNet(alpha=0.001, l1_ratio=0.6)
+regr.fit(X, y, groups)
+en_coefficients = {}
+for i, col in enumerate(df.columns):
+    en_coefficients[col] = regr.coef_[i]
+{% endhighlight %}
+
+<pre>
+{'0.0': -0.3047726423733812,
+ '1B': 0.25748750699647138,
+ '2B': 0.35889132154662995,
+ '3B': -0.14988674024090118,
+ 'Adjusted Team Payroll': 0.54625359519308125,
+ 'Batting_Career_2B': 0.84243456942856298,
+ 'Batting_Career_3B': 0.59913899613210242,
+ 'Batting_Career_AVG': -0.35894026434519272,
+ 'Batting_Career_G': -0.14729811028642528,
+ 'Batting_Career_H': 0.0,
+ 'Batting_Career_HR': 0.78105719697275222,
+ 'Batting_Career_Num_Seasons': -1.1793233106665073,
+ 'Batting_Career_OBP': 0.0,
+ 'Batting_Career_PSN': 0.52551886237215906,
+ 'Batting_Career_R': -0.0,
+ 'Batting_Career_RBI': 0.61225141161728402,
+ 'Batting_Career_SB': -0.17972207609872703,
+ 'Batting_Career_SLG': 1.1473103292071138,
+ 'Batting_Career_TB': 0.69807716951694032,
+ 'C': 0.0,
+ 'Fielding_Career_A': -0.0,
+ 'Fielding_Career_E': 0.071400782449289851,
+ 'Fielding_Career_FPCT': 0.0,
+ 'Fielding_Career_G': 1.1490235733182153,
+ 'Fielding_Career_PO': 0.17053361139204987,
+ 'Fielding_G': 0.0,
+ 'Fielding_Num_Seasons': 0.0,
+ 'MULTIPLE': -0.015179815039546003,
+ 'Num_All_Star_Appearances': 2.9585877533978362,
+ 'Num_Post_Season_Appearances': 0.22848002839269588,
+ 'P': -0.021741654556822559,
+ 'Pitching_Career_ER': -0.38322604452848602,
+ 'Pitching_Career_ERA': -0.011391062162622766,
+ 'Pitching_Career_GS': 0.0,
+ 'Pitching_Career_IP': 0.0,
+ 'Pitching_Career_L': -0.0,
+ 'Pitching_Career_Num_Seasons': -0.0,
+ 'Pitching_Career_SO': 4.2715317739655374,
+ 'Pitching_Career_W': 0.68767296740585693,
+ 'SS': 0.11953849226009178}
+</pre>
+
+### Findings
+
+Ridge regression did not eliminate any coefficients, as expected. Nor did the accuracy of the model change much. 
+
+LASSO did the best job at simplifying the model, as it selected the fewest variables. The accuracy was slightly reduced, but it is close. If we were concerned about how this model would perform on new data, this tradeoff might be attractive. 
+
+This is also a benefit in computationally expensive problems where there are a lot of data points -- perhaps millions of variables. 
+
+ElasticNet performed in-between Ridge and LASSO.  
+
+## A Simplified Model
+
+My favorite approach to this problem was simply fitting an OLS model in statsmodels and eliminating the statistically insignificant variables.
+
+This is what I came up with:
+{% highlight python %}
+y, X = dmatrices('Adjusted_Salary ~ Batting_Career_TB'\
+                 '+ Pitching_Career_IP + Pitching_Career_SO '\
+                 '+ Num_All_Star_Appearances '\
+                 '+ NO_POSITION + FIRST_BASE + SECOND_BASE', data=df, return_type='dataframe')
+mod = sm.OLS(y, X)
+res = mod.fit()  
+print(res.summary())
+{% endhighlight %}
+<pre>
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:        Adjusted_Salary   R-squared:                       0.501
+Model:                            OLS   Adj. R-squared:                  0.501
+Method:                 Least Squares   F-statistic:                     3472.
+Date:                Tue, 01 Nov 2016   Prob (F-statistic):               0.00
+Time:                        09:30:19   Log-Likelihood:                -31318.
+No. Observations:               24188   AIC:                         6.265e+04
+Df Residuals:                   24180   BIC:                         6.272e+04
+Df Model:                           7                                         
+Covariance Type:            nonrobust                                         
+============================================================================================
+                               coef    std err          t      P>|t|      [95.0% Conf. Int.]
+--------------------------------------------------------------------------------------------
+Intercept                    0.2996      0.008     37.092      0.000         0.284     0.315
+Batting_Career_TB            4.3374      0.064     67.495      0.000         4.211     4.463
+Pitching_Career_IP          -0.5935      0.228     -2.598      0.009        -1.041    -0.146
+Pitching_Career_SO           8.2155      0.339     24.215      0.000         7.551     8.881
+Num_All_Star_Appearances     2.6404      0.096     27.630      0.000         2.453     2.828
+NO_POSITION                 -0.2963      0.030     -9.767      0.000        -0.356    -0.237
+FIRST_BASE                   0.3226      0.034      9.408      0.000         0.255     0.390
+SECOND_BASE                  0.0881      0.040      2.210      0.027         0.010     0.166
+==============================================================================
+Omnibus:                     4686.175   Durbin-Watson:                   1.946
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):            50380.234
+Skew:                           0.620   Prob(JB):                         0.00
+Kurtosis:                       9.961   Cond. No.                         72.0
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+</pre>
+
+I like the OLS summary from statsmodels because it's very easy to interpret:
+
+* Total Bases is the most important batting statistic. Players are paid for their ability to hit.
+* Strikeouts is the most important metric for pitchers. 
+* Innings Pitched is negatively correlated with salaries because the rate of strike-outs is lower for a pitcher with more innings pitched.
+* Players with more All-Star Appearances are paid proportionally more based on the number of games they apppeared in.
+* NO_POSITION: This might require further investigation, but I suspect this refers to designated hitters. They would play no fielding position. On average, they earn less, hence the negative correlation.
+* First and Second base players earn more on average.
 
