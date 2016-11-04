@@ -41,8 +41,7 @@ The code I will show requires Python 3, scikit-learn, pandas, numpy and statsmod
 ## 3. <a name="about">About Regression</a>
 
 Multiple regression is the most basic modeling technique for understanding the relationship between two or more variables.
-I'm going to assume familiarity with regression, but if you would like a refresher, the following is an excellent primer.
-https://www.analyticsvidhya.com/blog/2015/10/regression-python-beginners/
+I'm going to assume familiarity with regression, but if you would like a refresher, Analytics Vidhya has an [excellent primer](https://www.analyticsvidhya.com/blog/2015/10/regression-python-beginners/).
 
 ## 4. <a name="the-data">The Data</a>
 

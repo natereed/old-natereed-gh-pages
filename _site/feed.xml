@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 04 Nov 2016 15:15:32 -0500</pubDate>
-    <lastBuildDate>Fri, 04 Nov 2016 15:15:32 -0500</lastBuildDate>
+    <pubDate>Fri, 04 Nov 2016 15:21:14 -0500</pubDate>
+    <lastBuildDate>Fri, 04 Nov 2016 15:21:14 -0500</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -54,8 +54,7 @@ relationship between salaries and performance on the field.&lt;/p&gt;
 &lt;h2 id=&quot;a-nameaboutabout-regressiona&quot;&gt;3. &lt;a name=&quot;about&quot;&gt;About Regression&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;Multiple regression is the most basic modeling technique for understanding the relationship between two or more variables.
-I’m going to assume familiarity with regression, but if you would like a refresher, the following is an excellent primer.
-https://www.analyticsvidhya.com/blog/2015/10/regression-python-beginners/&lt;/p&gt;
+I’m going to assume familiarity with regression, but if you would like a refresher, Analytics Vidhya has an &lt;a href=&quot;https://www.analyticsvidhya.com/blog/2015/10/regression-python-beginners/&quot;&gt;excellent primer&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h2 id=&quot;a-namethe-datathe-dataa&quot;&gt;4. &lt;a name=&quot;the-data&quot;&gt;The Data&lt;/a&gt;&lt;/h2&gt;
 
