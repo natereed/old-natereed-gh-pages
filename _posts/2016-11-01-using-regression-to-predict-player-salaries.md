@@ -4,19 +4,21 @@ title: Using Regression to Predict Baseball Salaries
 permalink: /using-regression-to-predict-team-wins/
 ---
 
-1. Introduction
-2. About Regression 
-3. The Data
-4. Regression Example: Model Team Wins
-5. Exploring Player Salaries
-6. Modeling Player Salaries
+1. [Introduction](#introduction)
+2. [About Regression](#about) 
+3. [The Data](#the-data)
+4. [Regression Example: Model Team Wins](#team-wins)
+5. [Exploring Player Salaries](#explore-player-salaries)
+6. [Modeling Player Salaries](#modeling-player-salaries)
 7. [Regularization](#regularization)
-* a. Ridge
-* b. LASSO
-* c. ElasticNet
-* d. Findings
+* a. [Ridge](#ridge)
+* b. [LASSO](#lasso)
+* c. [ElasticNet](#elastic-net)
+* d. [Results](#results)
+8. [A Simplified Model](#a-simplified-model)
+9. [Summary and Conclusions](#summary-and-conclusions)
 
-## 1. Introduction
+## 1. <a name="introduction">Introduction</a>
 
 In baseball and other sports, we often wonder what drives player compensation. Highly-sought free agents sign record-breaking
 contracts in seemingly every off-season. Surely, we think, salaries must be based on some rational measures of productivity on the field.
@@ -29,20 +31,20 @@ I will first show basic linear regression, and then dive into regularization, a 
 feature selection, reduce model complexity and prevent over-fitting. We will use these techniques to understand the
 relationship between salaries and performance on the field.
 
-## 2. About Regression
+## 2. <a name="about">About Regression</a>
 
 Multiple regression is the most basic modeling technique for understanding the relationship between two or more variables.
 I'm going to assume familiarity with regression, but if you would like a refresher, the following is an excellent primer.
 https://www.analyticsvidhya.com/blog/2015/10/regression-python-beginners/
 
-## 3. The Data
+## 3. <a name="the-data">The Data</a>
 
 Data going back to the beginning of baseball in 1871 is available in the Lahman database. Initially, I created my own
 database by scraping data from MLB.com and USAToday.com, but later I found that data as recent as the 2015 season
 is available on Sean Lahman's website http://www.seanlahman.com/baseball-archive/statistics/. It appears that the
 database is updated at the end of each season, as the last update was March 2016.
 
-## 4. Regression Example: Model Team Wins
+## 4. <a name="team-wins">Regression Example: Model Team Wins</a>
 
 First, let us construct a regression model on team wins. What are the key drivers of winning in baseball?
 
@@ -270,7 +272,7 @@ Typically, statsmodels is used in the "statistics" world, while scikit learn is 
 each have strengths and weaknesses. The method shown above is one method of feature selection, but we would still want to
 see how well the model generalizes to new data. For that, the cross_validation module in scikit-learn is well-suited. 
 
-## 5. Exploring Player Salaries
+## 5. <a name="exploring-player-salaries">Exploring Player Salaries</a>
 
 If runs are the primary driver of team wins, what factors are most important when it comes to player salaries? The
 universe of possibilities is vast when it comes to predicting compensation. There are different types of players,
@@ -302,7 +304,7 @@ Shown are a few variables that appear to be highly correlated with salaries:
 
 RBI (runs batted in) is a batting metric commonly used to measure hitting ability. FPCT (Fielding Percentage) is the ratio of put-outs and assists to total chances. These, together with IP (Innings Pitched) and G (Batting Games) appear to be positively correlated to salaries.
 
-## 6. Modeling Player Salaries
+## 6. <a name="modeling-player-salaries">Modeling Player Salaries</a>
 
 As with team wins, we will use regression to model player salaries, but I will introduce some automated techniques
 for feature selection. These techniques come in handy for highly-dimensional data and for tuning more complex models. 
@@ -315,7 +317,7 @@ Rather than embed the full code here, I will link to the iPython notebook and hi
 I wrote a script (generate_observations.py) that combines annual salaries with prior year playing statistics, labeled "{Statistic}.Year-1". I only used the prior year, but I added a career statistic for several important variables. In other words, each row contains the current salary, data for the most recent year, and aggregate stats for the player's entire career up to and including
 the previous year of play.
 
-The full data pipeline is documented in the github repo.
+The full data pipeline is documented in the [github repo](https://github.com/natereed/predicting-team-wins-and-player-salaries).
 
 In my iPython notebook, I show the inspect the first few rows as follows:
 
@@ -824,9 +826,11 @@ The effect of regularization is to shrink or eliminate coefficients. Note that R
 
 As you can see, the effect of L1 and L2 depend greatly on the value of alpha. If alpha is zero, then L1 and L2 will perform exactly as Ordinary Least Sequares. 
 
-We'll use GridSearchCV to perform K-fold cross-validation and look for the optimal value of alpha, and in the case of ElasticNet the l1/l2 ratio. Each time GridSearchCV tries a value of alpha that does not converge, we get some warnings: "ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations. Fitting data with very small alpha may cause precision problems." I omitted these from the output below. In each case, we were able to find a value of alpha that did converge.
+We'll use GridSearchCV to perform K-fold cross-validation and look for the optimal value of alpha, and in the case of ElasticNet the l1/l2 ratio.
 
-### Ridge Regression
+(Note: GridSearchCV will output many warnings about non-convergence for the given values of alpha and l1/l2, but they can be ignored. For each type of regularization, I was able to find parameters for which the models did converge. Those warning messages are omitted from the output below).
+
+### a. <a name="ridge">Ridge Regression</a>
 
 {% highlight python %}
 alpha_ridge = [1e-15, 1e-10, 1e-8, 1e-5,1e-4, 1e-3,1e-2, 1, 5, 10, 20, 100, 1000]
@@ -839,7 +843,7 @@ print("The best parameters are %s with a score of %0.2f"
       % (regr.best_params_, regr.best_score_))
 {% endhighlight %}
 
-*The best parameters are {'alpha': 5} with a score of 0.62*
+**The best parameters are {'alpha': 5} with a score of 0.62**
 
 We look at the coefficients
 
@@ -893,7 +897,7 @@ ridge_coefficients
  'SS': 0.14990154035196948}
 </pre>
 
-### LASSO
+### b. <a name="lasso">LASSO</a>
 
 {% highlight python %}
 alpha_lasso = [1e-15, 1e-10, 1e-8, 1e-5,1e-4, 1e-3,1e-2, 1, 5, 10, 20, 100, 1000, 10000]
@@ -906,7 +910,7 @@ print("The best parameters are %s with a score of %0.2f"
       % (regr.best_params_, regr.best_score_))
 {% endhighlight %}
 
-The best parameters are {'alpha': 0.001} with a score of 0.62
+**The best parameters are {'alpha': 0.001} with a score of 0.62**
 
 {% highlight python %}
 regr = linear_model.Lasso(alpha=0.001)
@@ -964,11 +968,11 @@ lasso_coefficients
 print("{} variables selected.".format(sum([lasso_coefficients[var] != 0 for var in lasso_coefficients])))
 {% endhighlight %}
 
-*25 variables selected.*
+**25 variables selected.**
 
 Nice! Many of the 38 variables we originally used were eliminated. 
 
-### ElasticNet 
+### c. <a name="elastic-net">ElasticNet</a> 
 
 {% highlight python %}
 regr = linear_model.ElasticNet()
@@ -1036,7 +1040,13 @@ for i, col in enumerate(df.columns):
  'SS': 0.11953849226009178}
 </pre>
 
-### Findings
+{% highlight python %}
+print("{} variables selected.".format(sum([en_coefficients[var] != 0 for var in en_coefficients])))
+{% endhighlight %}
+
+**28 variables selected.**
+
+### d. <a name="results">Results</a>
 
 Ridge regression did not eliminate any coefficients, as expected. Nor did the accuracy of the model change much. 
 
@@ -1046,7 +1056,7 @@ This is also a benefit in computationally expensive problems where there are a l
 
 ElasticNet performed in-between Ridge and LASSO.  
 
-## A Simplified Model
+## 8. <a name="a-simplified-model">A Simplified Model</a>
 
 My favorite approach to this problem was simply fitting an OLS model in statsmodels and eliminating the statistically insignificant variables.
 
@@ -1098,8 +1108,21 @@ I like the OLS summary from statsmodels because it's very easy to interpret:
 
 * Total Bases is the most important batting statistic. Players are paid for their ability to hit.
 * Strikeouts is the most important metric for pitchers. 
-* Innings Pitched is negatively correlated with salaries because the rate of strike-outs is lower for a pitcher with more innings pitched.
+* Innings Pitched is negatively correlated with salaries because the rate of strike-outs is lower for a pitcher with more innings pitched. 
 * Players with more All-Star Appearances are paid proportionally more based on the number of games they apppeared in.
 * NO_POSITION: This might require further investigation, but I suspect this refers to designated hitters. They would play no fielding position. On average, they earn less, hence the negative correlation.
 * First and Second base players earn more on average.
 
+## 9. <a name="summary-and-conclusions">Summary and Conclusions</a>
+
+We looked at multiple regression for modeling a couple of interesting variables in baseball: team wins and player salaries. I showed 3 regularization techniques for performing automated feature selection during cross-validation to score model accuracy. As a result, we have a model that is more robust, parsimonious and less prone to over-fitting.
+
+I also showed how feature selection could be performed by eliminating statistically insignificant variables, with similar benefits as regularization. The statsmodels package makes this very easy by producing summary output that is similar to R's.
+
+We determined that the most important drivers of baseball compensation are a handful of commonly-used metrics of batting and pitching ability, as well as the position played.
+
+Our model accuracy is not as good as the team wins model. There is a great deal of variation in player salaries, not all of which can be explained by the data. Maybe there is more data that could be added to our regression model. It's more likely, though, that much of what drives player compensation is random chance, errors in financial judgement or bias.
+
+Michael Lewis writes about the puzzling way that baseball scouts evaluate players in his well-known book, Moneyball. By using statistical analysis and smart management of the roster, the Oakland A's fielded a winning team despite having one of the lowest payrolls in major league baseball. One of the book's key insights is that hitting skill is overvalued. This is consistent with our simplified model, in which TB (Total Bases) is an important component.
+
+ The ability to get on base is what's important -- whether that is accomplished by walks or hits. By recruiting players with high OBP (on-base percentage) and OK hitting skills, salaries can be minimized while achieving good numbers of runs. Runs -- not hits -- is the critical driver for winning, as we showed in the Team Wins model.

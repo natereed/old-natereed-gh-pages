@@ -6,30 +6,32 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 04 Nov 2016 10:37:58 -0500</pubDate>
-    <lastBuildDate>Fri, 04 Nov 2016 10:37:58 -0500</lastBuildDate>
+    <pubDate>Fri, 04 Nov 2016 13:18:54 -0500</pubDate>
+    <lastBuildDate>Fri, 04 Nov 2016 13:18:54 -0500</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
         <title>Using Regression to Predict Baseball Salaries</title>
         <description>&lt;ol&gt;
-  &lt;li&gt;Introduction&lt;/li&gt;
-  &lt;li&gt;About Regression&lt;/li&gt;
-  &lt;li&gt;The Data&lt;/li&gt;
-  &lt;li&gt;Regression Example: Model Team Wins&lt;/li&gt;
-  &lt;li&gt;Exploring Player Salaries&lt;/li&gt;
-  &lt;li&gt;Modeling Player Salaries&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#about&quot;&gt;About Regression&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#the-data&quot;&gt;The Data&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#team-wins&quot;&gt;Regression Example: Model Team Wins&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#explore-player-salaries&quot;&gt;Exploring Player Salaries&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#modeling-player-salaries&quot;&gt;Modeling Player Salaries&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#regularization&quot;&gt;Regularization&lt;/a&gt;
     &lt;ul&gt;
-      &lt;li&gt;a. Ridge&lt;/li&gt;
-      &lt;li&gt;b. LASSO&lt;/li&gt;
-      &lt;li&gt;c. ElasticNet&lt;/li&gt;
-      &lt;li&gt;d. Findings&lt;/li&gt;
+      &lt;li&gt;a. &lt;a href=&quot;#ridge&quot;&gt;Ridge&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;b. &lt;a href=&quot;#lasso&quot;&gt;LASSO&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;c. &lt;a href=&quot;#elastic-net&quot;&gt;ElasticNet&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;d. &lt;a href=&quot;#results&quot;&gt;Results&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#a-simplified-model&quot;&gt;A Simplified Model&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#summary-and-conclusions&quot;&gt;Summary and Conclusions&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h2 id=&quot;introduction&quot;&gt;1. Introduction&lt;/h2&gt;
+&lt;h2 id=&quot;a-nameintroductionintroductiona&quot;&gt;1. &lt;a name=&quot;introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;In baseball and other sports, we often wonder what drives player compensation. Highly-sought free agents sign record-breaking
 contracts in seemingly every off-season. Surely, we think, salaries must be based on some rational measures of productivity on the field.&lt;/p&gt;
@@ -42,20 +44,20 @@ salaries are largely determined by on-field statistics, information that is avai
 feature selection, reduce model complexity and prevent over-fitting. We will use these techniques to understand the
 relationship between salaries and performance on the field.&lt;/p&gt;
 
-&lt;h2 id=&quot;about-regression&quot;&gt;2. About Regression&lt;/h2&gt;
+&lt;h2 id=&quot;a-nameaboutabout-regressiona&quot;&gt;2. &lt;a name=&quot;about&quot;&gt;About Regression&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;Multiple regression is the most basic modeling technique for understanding the relationship between two or more variables.
 I’m going to assume familiarity with regression, but if you would like a refresher, the following is an excellent primer.
 https://www.analyticsvidhya.com/blog/2015/10/regression-python-beginners/&lt;/p&gt;
 
-&lt;h2 id=&quot;the-data&quot;&gt;3. The Data&lt;/h2&gt;
+&lt;h2 id=&quot;a-namethe-datathe-dataa&quot;&gt;3. &lt;a name=&quot;the-data&quot;&gt;The Data&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;Data going back to the beginning of baseball in 1871 is available in the Lahman database. Initially, I created my own
 database by scraping data from MLB.com and USAToday.com, but later I found that data as recent as the 2015 season
 is available on Sean Lahman’s website http://www.seanlahman.com/baseball-archive/statistics/. It appears that the
 database is updated at the end of each season, as the last update was March 2016.&lt;/p&gt;
 
-&lt;h2 id=&quot;regression-example-model-team-wins&quot;&gt;4. Regression Example: Model Team Wins&lt;/h2&gt;
+&lt;h2 id=&quot;a-nameteam-winsregression-example-model-team-winsa&quot;&gt;4. &lt;a name=&quot;team-wins&quot;&gt;Regression Example: Model Team Wins&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;First, let us construct a regression model on team wins. What are the key drivers of winning in baseball?&lt;/p&gt;
 
@@ -271,7 +273,7 @@ can use regression and interpret the results.&lt;/p&gt;
 each have strengths and weaknesses. The method shown above is one method of feature selection, but we would still want to
 see how well the model generalizes to new data. For that, the cross_validation module in scikit-learn is well-suited.&lt;/p&gt;
 
-&lt;h2 id=&quot;exploring-player-salaries&quot;&gt;5. Exploring Player Salaries&lt;/h2&gt;
+&lt;h2 id=&quot;a-nameexploring-player-salariesexploring-player-salariesa&quot;&gt;5. &lt;a name=&quot;exploring-player-salaries&quot;&gt;Exploring Player Salaries&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;If runs are the primary driver of team wins, what factors are most important when it comes to player salaries? The
 universe of possibilities is vast when it comes to predicting compensation. There are different types of players,
@@ -303,7 +305,7 @@ are other variables like the team budget. There is a wide range of payrolls by t
 
 &lt;p&gt;RBI (runs batted in) is a batting metric commonly used to measure hitting ability. FPCT (Fielding Percentage) is the ratio of put-outs and assists to total chances. These, together with IP (Innings Pitched) and G (Batting Games) appear to be positively correlated to salaries.&lt;/p&gt;
 
-&lt;h2 id=&quot;modeling-player-salaries&quot;&gt;6. Modeling Player Salaries&lt;/h2&gt;
+&lt;h2 id=&quot;a-namemodeling-player-salariesmodeling-player-salariesa&quot;&gt;6. &lt;a name=&quot;modeling-player-salaries&quot;&gt;Modeling Player Salaries&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;As with team wins, we will use regression to model player salaries, but I will introduce some automated techniques
 for feature selection. These techniques come in handy for highly-dimensional data and for tuning more complex models.&lt;/p&gt;
@@ -311,12 +313,12 @@ for feature selection. These techniques come in handy for highly-dimensional dat
 &lt;p&gt;We will go through the same kind of process for cleaning and normalizing the input variables that we executed above.
 Rather than embed the full code here, I will link to the iPython notebook and highlight the important modeling steps below.&lt;/p&gt;
 
-&lt;h3 id=&quot;the-data-1&quot;&gt;The Data&lt;/h3&gt;
+&lt;h3 id=&quot;the-data&quot;&gt;The Data&lt;/h3&gt;
 
 &lt;p&gt;I wrote a script (generate_observations.py) that combines annual salaries with prior year playing statistics, labeled “{Statistic}.Year-1”. I only used the prior year, but I added a career statistic for several important variables. In other words, each row contains the current salary, data for the most recent year, and aggregate stats for the player’s entire career up to and including
 the previous year of play.&lt;/p&gt;
 
-&lt;p&gt;The full data pipeline is documented in the github repo.&lt;/p&gt;
+&lt;p&gt;The full data pipeline is documented in the &lt;a href=&quot;https://github.com/natereed/predicting-team-wins-and-player-salaries&quot;&gt;github repo&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;In my iPython notebook, I show the inspect the first few rows as follows:&lt;/p&gt;
 
@@ -827,9 +829,11 @@ L2 minimization objective = LS Obj + α * (sum of square of coefficients)
 
 &lt;p&gt;As you can see, the effect of L1 and L2 depend greatly on the value of alpha. If alpha is zero, then L1 and L2 will perform exactly as Ordinary Least Sequares.&lt;/p&gt;
 
-&lt;p&gt;We’ll use GridSearchCV to perform K-fold cross-validation and look for the optimal value of alpha, and in the case of ElasticNet the l1/l2 ratio. Each time GridSearchCV tries a value of alpha that does not converge, we get some warnings: “ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations. Fitting data with very small alpha may cause precision problems.” I omitted these from the output below. In each case, we were able to find a value of alpha that did converge.&lt;/p&gt;
+&lt;p&gt;We’ll use GridSearchCV to perform K-fold cross-validation and look for the optimal value of alpha, and in the case of ElasticNet the l1/l2 ratio.&lt;/p&gt;
 
-&lt;h3 id=&quot;ridge-regression&quot;&gt;Ridge Regression&lt;/h3&gt;
+&lt;p&gt;(Note: GridSearchCV will output many warnings about non-convergence for the given values of alpha and l1/l2, but they can be ignored. For each type of regularization, I was able to find parameters for which the models did converge. Those warning messages are omitted from the output below).&lt;/p&gt;
+
+&lt;h3 id=&quot;a-a-nameridgeridge-regressiona&quot;&gt;a. &lt;a name=&quot;ridge&quot;&gt;Ridge Regression&lt;/a&gt;&lt;/h3&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;alpha_ridge&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1e-15&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1e-10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1e-8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1e-5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1e-4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1e-3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1e-2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'alpha'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;alpha_ridge&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
@@ -840,7 +844,7 @@ L2 minimization objective = LS Obj + α * (sum of square of coefficients)
 &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;The best parameters are &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s with a score of &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%0.2&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;f&quot;&lt;/span&gt;
       &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;best_params_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;best_score_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;&lt;em&gt;The best parameters are {‘alpha’: 5} with a score of 0.62&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The best parameters are {‘alpha’: 5} with a score of 0.62&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;We look at the coefficients&lt;/p&gt;
 
@@ -892,7 +896,7 @@ L2 minimization objective = LS Obj + α * (sum of square of coefficients)
  'SS': 0.14990154035196948}
 &lt;/pre&gt;
 
-&lt;h3 id=&quot;lasso&quot;&gt;LASSO&lt;/h3&gt;
+&lt;h3 id=&quot;b-a-namelassolassoa&quot;&gt;b. &lt;a name=&quot;lasso&quot;&gt;LASSO&lt;/a&gt;&lt;/h3&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;alpha_lasso&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1e-15&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1e-10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1e-8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1e-5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1e-4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1e-3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1e-2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'alpha'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;alpha_lasso&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
@@ -903,7 +907,7 @@ L2 minimization objective = LS Obj + α * (sum of square of coefficients)
 &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;The best parameters are &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s with a score of &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%0.2&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;f&quot;&lt;/span&gt;
       &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;best_params_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;best_score_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;The best parameters are {‘alpha’: 0.001} with a score of 0.62&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The best parameters are {‘alpha’: 0.001} with a score of 0.62&lt;/strong&gt;&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;linear_model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Lasso&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;alpha&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.001&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;groups&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
@@ -957,11 +961,11 @@ L2 minimization objective = LS Obj + α * (sum of square of coefficients)
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;{} variables selected.&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lasso_coefficients&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lasso_coefficients&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;&lt;em&gt;25 variables selected.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;25 variables selected.&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;Nice! Many of the 38 variables we originally used were eliminated.&lt;/p&gt;
 
-&lt;h3 id=&quot;elasticnet&quot;&gt;ElasticNet&lt;/h3&gt;
+&lt;h3 id=&quot;c-a-nameelastic-netelasticneta&quot;&gt;c. &lt;a name=&quot;elastic-net&quot;&gt;ElasticNet&lt;/a&gt;&lt;/h3&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;regr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;linear_model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ElasticNet&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'alpha'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;alpha_lasso&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
@@ -1025,7 +1029,11 @@ The best parameters are {'l1_ratio': 0.6, 'alpha': 0.001} with a score of 0.62
  'SS': 0.11953849226009178}
 &lt;/pre&gt;
 
-&lt;h3 id=&quot;findings&quot;&gt;Findings&lt;/h3&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;{} variables selected.&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;en_coefficients&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;en_coefficients&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;strong&gt;28 variables selected.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;d-a-nameresultsresultsa&quot;&gt;d. &lt;a name=&quot;results&quot;&gt;Results&lt;/a&gt;&lt;/h3&gt;
 
 &lt;p&gt;Ridge regression did not eliminate any coefficients, as expected. Nor did the accuracy of the model change much.&lt;/p&gt;
 
@@ -1035,7 +1043,7 @@ The best parameters are {'l1_ratio': 0.6, 'alpha': 0.001} with a score of 0.62
 
 &lt;p&gt;ElasticNet performed in-between Ridge and LASSO.&lt;/p&gt;
 
-&lt;h2 id=&quot;a-simplified-model&quot;&gt;A Simplified Model&lt;/h2&gt;
+&lt;h2 id=&quot;a-namea-simplified-modela-simplified-modela&quot;&gt;8. &lt;a name=&quot;a-simplified-model&quot;&gt;A Simplified Model&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;My favorite approach to this problem was simply fitting an OLS model in statsmodels and eliminating the statistically insignificant variables.&lt;/p&gt;
 
@@ -1094,6 +1102,19 @@ Warnings:
   &lt;li&gt;First and Second base players earn more on average.&lt;/li&gt;
 &lt;/ul&gt;
 
+&lt;h2 id=&quot;a-namesummary-and-conclusionssummary-and-conclusionsa&quot;&gt;9. &lt;a name=&quot;summary-and-conclusions&quot;&gt;Summary and Conclusions&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;We looked at multiple regression for modeling a couple of interesting variables in baseball: team wins and player salaries. I showed 3 regularization techniques for performing automated feature selection during cross-validation to score model accuracy. As a result, we have a model that is more robust, parsimonious and less prone to over-fitting.&lt;/p&gt;
+
+&lt;p&gt;I also showed how feature selection could be performed by eliminating statistically insignificant variables, with similar benefits as regularization. The statsmodels package makes this very easy by producing summary output that is similar to R’s.&lt;/p&gt;
+
+&lt;p&gt;We determined that the most important drivers of baseball compensation are a handful of commonly-used metrics of batting and pitching ability, as well as the position played.&lt;/p&gt;
+
+&lt;p&gt;Our model accuracy is not as good as the team wins model. There is a great deal of variation in player salaries, not all of which can be explained by the data. Maybe there is more data that could be added to our regression model. It’s more likely, though, that much of what drives player compensation is random chance, errors in financial judgement or bias.&lt;/p&gt;
+
+&lt;p&gt;Michael Lewis writes about the puzzling way that baseball scouts evaluate players in his well-known book, Moneyball. By using statistical analysis and smart management of the roster, the Oakland A’s fielded a winning team despite having one of the lowest payrolls in major league baseball. One of the book’s key insights is that hitting skill is overvalued. This is consistent with our simplified model, in which TB (Total Bases) is an important component.&lt;/p&gt;
+
+&lt;p&gt;The ability to get on base is what’s important – whether that is accomplished by walks or hits. By recruiting players with high OBP (on-base percentage) and OK hitting skills, salaries can be minimized while achieving good numbers of runs. Runs – not hits – is the critical driver for winning, as we showed in the Team Wins model.&lt;/p&gt;
 </description>
         <pubDate>Tue, 01 Nov 2016 00:00:00 -0500</pubDate>
         <link>http://localhost:4000/using-regression-to-predict-team-wins/</link>
