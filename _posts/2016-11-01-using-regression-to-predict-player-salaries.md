@@ -787,7 +787,7 @@ as accurate as the Team Wins model we developed above.
 
 ### Use Cross-Validation
 
-To get a better test of fit, we will perform 5-fold cross validation. A more detailed explation of CV is here, but essentially this method involves systematically performing train/test splits, fitting the model and testing it on a holdout set. We repeat this for several subsets of training/test data and take the average score:
+To get a better test of fit, we will perform 5-fold cross validation. A more detailed explation of CV is here, but essentially this method involves systematically performing train/test splits, fitting the model on the training set and evaluating it on the test set. We repeat this for several subsets of training/test data and take the average score:
 
 {% highlight python %}
 # K-fold group cross-validation
@@ -801,7 +801,7 @@ print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
 
 *Accuracy: 0.65 (+/- 0.08)*
 
-Not bad. It shows a more realistic score of 0.65. Essentially, this is a measure of how well the model performs on new data.
+Not bad. This score is a measure of how well the model performs on new data.
 
 Because we include potentially multiple years of data for each player, we have to be concerned about linear relationships among our observations. We used GroupKFold to ensure that no player appears in both test and train sets for any fold. This prevents over-fitting. While our observations within each fold are not linearly independent, the train and test splits remain independent.
 
@@ -811,7 +811,7 @@ As we discussed in the first part on Team Wins, too many features can make the m
 
 Besides the approach we showed in part one, a well-known approach to reducing model complexity is Regularization. I encourage you to read the tutorial linked here for understanding and motivation for Regularization, if you need an introduction or refresher.
 
-## <a name="regularization">Regularization</a>
+## 8. <a name="regularization">Regularization</a>
 
 There are two types of regularization for regression problems, and one which combines them:
 

@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 04 Nov 2016 15:53:48 -0500</pubDate>
-    <lastBuildDate>Fri, 04 Nov 2016 15:53:48 -0500</lastBuildDate>
+    <pubDate>Fri, 04 Nov 2016 16:05:13 -0500</pubDate>
+    <lastBuildDate>Fri, 04 Nov 2016 16:05:13 -0500</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -788,7 +788,7 @@ as accurate as the Team Wins model we developed above.&lt;/p&gt;
 
 &lt;h3 id=&quot;use-cross-validation&quot;&gt;Use Cross-Validation&lt;/h3&gt;
 
-&lt;p&gt;To get a better test of fit, we will perform 5-fold cross validation. A more detailed explation of CV is here, but essentially this method involves systematically performing train/test splits, fitting the model and testing it on a holdout set. We repeat this for several subsets of training/test data and take the average score:&lt;/p&gt;
+&lt;p&gt;To get a better test of fit, we will perform 5-fold cross validation. A more detailed explation of CV is here, but essentially this method involves systematically performing train/test splits, fitting the model on the training set and evaluating it on the test set. We repeat this for several subsets of training/test data and take the average score:&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# K-fold group cross-validation&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Player Id'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;inplace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
@@ -800,7 +800,7 @@ as accurate as the Team Wins model we developed above.&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;Accuracy: 0.65 (+/- 0.08)&lt;/em&gt;&lt;/p&gt;
 
-&lt;p&gt;Not bad. It shows a more realistic score of 0.65. Essentially, this is a measure of how well the model performs on new data.&lt;/p&gt;
+&lt;p&gt;Not bad. This score is a measure of how well the model performs on new data.&lt;/p&gt;
 
 &lt;p&gt;Because we include potentially multiple years of data for each player, we have to be concerned about linear relationships among our observations. We used GroupKFold to ensure that no player appears in both test and train sets for any fold. This prevents over-fitting. While our observations within each fold are not linearly independent, the train and test splits remain independent.&lt;/p&gt;
 
@@ -810,7 +810,7 @@ as accurate as the Team Wins model we developed above.&lt;/p&gt;
 
 &lt;p&gt;Besides the approach we showed in part one, a well-known approach to reducing model complexity is Regularization. I encourage you to read the tutorial linked here for understanding and motivation for Regularization, if you need an introduction or refresher.&lt;/p&gt;
 
-&lt;h2 id=&quot;a-nameregularizationregularizationa&quot;&gt;&lt;a name=&quot;regularization&quot;&gt;Regularization&lt;/a&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;a-nameregularizationregularizationa&quot;&gt;8. &lt;a name=&quot;regularization&quot;&gt;Regularization&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;There are two types of regularization for regression problems, and one which combines them:&lt;/p&gt;
 
