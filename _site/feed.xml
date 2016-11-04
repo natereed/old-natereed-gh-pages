@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 04 Nov 2016 13:18:54 -0500</pubDate>
-    <lastBuildDate>Fri, 04 Nov 2016 13:18:54 -0500</lastBuildDate>
+    <pubDate>Fri, 04 Nov 2016 13:36:26 -0500</pubDate>
+    <lastBuildDate>Fri, 04 Nov 2016 13:36:26 -0500</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -1117,8 +1117,8 @@ Warnings:
 &lt;p&gt;The ability to get on base is what’s important – whether that is accomplished by walks or hits. By recruiting players with high OBP (on-base percentage) and OK hitting skills, salaries can be minimized while achieving good numbers of runs. Runs – not hits – is the critical driver for winning, as we showed in the Team Wins model.&lt;/p&gt;
 </description>
         <pubDate>Tue, 01 Nov 2016 00:00:00 -0500</pubDate>
-        <link>http://localhost:4000/using-regression-to-predict-team-wins/</link>
-        <guid isPermaLink="true">http://localhost:4000/using-regression-to-predict-team-wins/</guid>
+        <link>http://localhost:4000/using-regression-to-predict-baseball-salaries/</link>
+        <guid isPermaLink="true">http://localhost:4000/using-regression-to-predict-baseball-salaries/</guid>
         
         
       </item>

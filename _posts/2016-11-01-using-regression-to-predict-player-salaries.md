@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Using Regression to Predict Baseball Salaries
-permalink: /using-regression-to-predict-team-wins/
+permalink: /using-regression-to-predict-baseball-salaries/
 ---
 
 1. [Introduction](#introduction)
