@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 04 Nov 2016 15:21:14 -0500</pubDate>
-    <lastBuildDate>Fri, 04 Nov 2016 15:21:14 -0500</lastBuildDate>
+    <pubDate>Fri, 04 Nov 2016 15:53:48 -0500</pubDate>
+    <lastBuildDate>Fri, 04 Nov 2016 15:53:48 -0500</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -54,13 +54,13 @@ relationship between salaries and performance on the field.&lt;/p&gt;
 &lt;h2 id=&quot;a-nameaboutabout-regressiona&quot;&gt;3. &lt;a name=&quot;about&quot;&gt;About Regression&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;Multiple regression is the most basic modeling technique for understanding the relationship between two or more variables.
-I’m going to assume familiarity with regression, but if you would like a refresher, Analytics Vidhya has an &lt;a href=&quot;https://www.analyticsvidhya.com/blog/2015/10/regression-python-beginners/&quot;&gt;excellent primer&lt;/a&gt;.&lt;/p&gt;
+I’m going to assume familiarity with regression, but if you would like a refresher, &lt;a href=&quot;https://www.analyticsvidhya.com/&quot;&gt;Analytics Vidhya&lt;/a&gt; has an &lt;a href=&quot;https://www.analyticsvidhya.com/blog/2015/10/regression-python-beginners/&quot;&gt;excellent primer&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h2 id=&quot;a-namethe-datathe-dataa&quot;&gt;4. &lt;a name=&quot;the-data&quot;&gt;The Data&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;Data going back to the beginning of baseball in 1871 is available in the Lahman database. Initially, I created my own
 database by scraping data from MLB.com and USAToday.com, but later I found that data as recent as the 2015 season
-is available on Sean Lahman’s website http://www.seanlahman.com/baseball-archive/statistics/. It appears that the
+is available on &lt;a href=&quot;http://www.seanlahman.com/baseball-archive/statistics/&quot;&gt;Sean Lahman’s website&lt;/a&gt;. It appears that the
 database is updated at the end of each season, as the last update was March 2016.&lt;/p&gt;
 
 &lt;h2 id=&quot;a-nameteam-winsregression-example-model-team-winsa&quot;&gt;5. &lt;a name=&quot;team-wins&quot;&gt;Regression Example: Model Team Wins&lt;/a&gt;&lt;/h2&gt;

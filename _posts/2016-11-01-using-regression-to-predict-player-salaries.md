@@ -41,13 +41,13 @@ The code I will show requires Python 3, scikit-learn, pandas, numpy and statsmod
 ## 3. <a name="about">About Regression</a>
 
 Multiple regression is the most basic modeling technique for understanding the relationship between two or more variables.
-I'm going to assume familiarity with regression, but if you would like a refresher, Analytics Vidhya has an [excellent primer](https://www.analyticsvidhya.com/blog/2015/10/regression-python-beginners/).
+I'm going to assume familiarity with regression, but if you would like a refresher, [Analytics Vidhya](https://www.analyticsvidhya.com/) has an [excellent primer](https://www.analyticsvidhya.com/blog/2015/10/regression-python-beginners/).
 
 ## 4. <a name="the-data">The Data</a>
 
 Data going back to the beginning of baseball in 1871 is available in the Lahman database. Initially, I created my own
 database by scraping data from MLB.com and USAToday.com, but later I found that data as recent as the 2015 season
-is available on Sean Lahman's website http://www.seanlahman.com/baseball-archive/statistics/. It appears that the
+is available on [Sean Lahman's website](http://www.seanlahman.com/baseball-archive/statistics/). It appears that the
 database is updated at the end of each season, as the last update was March 2016.
 
 ## 5. <a name="team-wins">Regression Example: Model Team Wins</a>
