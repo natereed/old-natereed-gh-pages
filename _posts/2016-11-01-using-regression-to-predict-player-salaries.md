@@ -313,6 +313,8 @@ There are several other variables that appear to have a strong correlation with 
 
 ![Scatterplot Matrix](/images/pairs_plot.png "Salary Pairs")
 
+In addition, this pairs plot clues us in to predictor variables that appear to be correlated with each other, such as RBI's and Fielding games. We will want to remove correlated predictor variables from our model.
+
 ## 7. <a name="modeling-player-salaries">Modeling Player Salaries</a>
 
 As with team wins, we will use regression to model player salaries, but I will introduce some automated techniques
