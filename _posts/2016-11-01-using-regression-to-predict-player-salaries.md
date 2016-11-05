@@ -9,7 +9,7 @@ permalink: /using-regression-to-predict-baseball-salaries/
 3. [About Regression](#about) 
 4. [The Data](#the-data)
 5. [Regression Example: Model Team Wins](#team-wins)
-6. [Exploring Player Salaries](#explore-player-salaries)
+6. [Exploring Player Salaries](#exploring-player-salaries)
 7. [Modeling Player Salaries](#modeling-player-salaries)
 8. [Regularization](#regularization)
 * a. [Ridge](#ridge)
@@ -287,28 +287,31 @@ are other variables like the team budget. There is a wide range of payrolls by t
 
 To develop an intuition about which features could be predictive, it is helpful to do some exploratory analysis.  The full analysis is linked here, but I've included some key insights, below.
 
+### Salary vs. Time
+
+As we see from the plot below, average salaries have grown every year during the time period we analyzed:
+
+![Avg. Salary by Year](/images/salary-vs-time.png "Avg. Salary by Year")
+
 ### Salary Distribution
 
 The distribution of our salaries is left-skewed with a long right tail. A small number of players recieve disproportionately large salaries:
 
 ![Salary Distribution](/images/salary-distribution.png "Salary Distribution")
 
+When we plot salaries by position, we see a clear relationship between position played and salary:
+
+![Salary Vs. Position](/images/salary-vs-position.png "Salary vs. Position")
+
+First and second basemen have higher median salaries than other fielding positions.
+
+MULTIPLE includes players that have played more than one position in a year. This appears to include all outfielders (left, right and center field). Many of these players also played pitcher or other fielding positions.
+
 ### Player Statistics vs. Salaries
 
-Shown are a few variables that appear to be highly correlated with salaries:
+There are several other variables that appear to have a strong correlation with salary: RBI's (Runs Batted In), number of All-Star Appearances, Strikeouts and Fielding Games, among others:
 
-<table>
-  <tr>
-    <td><img src="/images/salary-vs-rbi.png"></td>
-    <td><img src="/images/salary-vs-pitching-ip.png"></td>
-  </tr>
-  <tr>
-    <td><img src="/images/salary-vs-fpct.png"></td>
-    <td><img src="/images/salary-vs-career-batting-g.png"></td>
-  </tr>
-</table>
-
-RBI (runs batted in) is a batting metric commonly used to measure hitting ability. FPCT (Fielding Percentage) is the ratio of put-outs and assists to total chances. These, together with IP (Innings Pitched) and G (Batting Games) appear to be positively correlated to salaries.
+![Scatterplot Matrix](/images/pairs_plot.png "Salary Pairs")
 
 ## 7. <a name="modeling-player-salaries">Modeling Player Salaries</a>
 

@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 04 Nov 2016 16:05:13 -0500</pubDate>
-    <lastBuildDate>Fri, 04 Nov 2016 16:05:13 -0500</lastBuildDate>
+    <pubDate>Sat, 05 Nov 2016 10:29:48 -0500</pubDate>
+    <lastBuildDate>Sat, 05 Nov 2016 10:29:48 -0500</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -18,7 +18,7 @@
   &lt;li&gt;&lt;a href=&quot;#about&quot;&gt;About Regression&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#the-data&quot;&gt;The Data&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#team-wins&quot;&gt;Regression Example: Model Team Wins&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#explore-player-salaries&quot;&gt;Exploring Player Salaries&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#exploring-player-salaries&quot;&gt;Exploring Player Salaries&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#modeling-player-salaries&quot;&gt;Modeling Player Salaries&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#regularization&quot;&gt;Regularization&lt;/a&gt;
     &lt;ul&gt;
@@ -288,28 +288,31 @@ are other variables like the team budget. There is a wide range of payrolls by t
 
 &lt;p&gt;To develop an intuition about which features could be predictive, it is helpful to do some exploratory analysis.  The full analysis is linked here, but I’ve included some key insights, below.&lt;/p&gt;
 
+&lt;h3 id=&quot;salary-vs-time&quot;&gt;Salary vs. Time&lt;/h3&gt;
+
+&lt;p&gt;As we see from the plot below, average salaries have grown every year during the time period we analyzed:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/salary-vs-time.png&quot; alt=&quot;Avg. Salary by Year&quot; title=&quot;Avg. Salary by Year&quot; /&gt;&lt;/p&gt;
+
 &lt;h3 id=&quot;salary-distribution&quot;&gt;Salary Distribution&lt;/h3&gt;
 
 &lt;p&gt;The distribution of our salaries is left-skewed with a long right tail. A small number of players recieve disproportionately large salaries:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/images/salary-distribution.png&quot; alt=&quot;Salary Distribution&quot; title=&quot;Salary Distribution&quot; /&gt;&lt;/p&gt;
 
+&lt;p&gt;When we plot salaries by position, we see a clear relationship between position played and salary:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/salary-vs-position.png&quot; alt=&quot;Salary Vs. Position&quot; title=&quot;Salary vs. Position&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;First and second basemen have higher median salaries than other fielding positions.&lt;/p&gt;
+
+&lt;p&gt;MULTIPLE includes players that have played more than one position in a year. This appears to include all outfielders (left, right and center field). Many of these players also played pitcher or other fielding positions.&lt;/p&gt;
+
 &lt;h3 id=&quot;player-statistics-vs-salaries&quot;&gt;Player Statistics vs. Salaries&lt;/h3&gt;
 
-&lt;p&gt;Shown are a few variables that appear to be highly correlated with salaries:&lt;/p&gt;
+&lt;p&gt;There are several other variables that appear to have a strong correlation with salary: RBI’s (Runs Batted In), number of All-Star Appearances, Strikeouts and Fielding Games, among others:&lt;/p&gt;
 
-&lt;table&gt;
-  &lt;tr&gt;
-    &lt;td&gt;&lt;img src=&quot;/images/salary-vs-rbi.png&quot; /&gt;&lt;/td&gt;
-    &lt;td&gt;&lt;img src=&quot;/images/salary-vs-pitching-ip.png&quot; /&gt;&lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-    &lt;td&gt;&lt;img src=&quot;/images/salary-vs-fpct.png&quot; /&gt;&lt;/td&gt;
-    &lt;td&gt;&lt;img src=&quot;/images/salary-vs-career-batting-g.png&quot; /&gt;&lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/table&gt;
-
-&lt;p&gt;RBI (runs batted in) is a batting metric commonly used to measure hitting ability. FPCT (Fielding Percentage) is the ratio of put-outs and assists to total chances. These, together with IP (Innings Pitched) and G (Batting Games) appear to be positively correlated to salaries.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/pairs_plot.png&quot; alt=&quot;Scatterplot Matrix&quot; title=&quot;Salary Pairs&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;a-namemodeling-player-salariesmodeling-player-salariesa&quot;&gt;7. &lt;a name=&quot;modeling-player-salaries&quot;&gt;Modeling Player Salaries&lt;/a&gt;&lt;/h2&gt;
 
