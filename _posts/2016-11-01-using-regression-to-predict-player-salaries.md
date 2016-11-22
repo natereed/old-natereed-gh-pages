@@ -2,6 +2,8 @@
 layout: page
 title: Using Regression to Predict Baseball Salaries
 permalink: /using-regression-to-predict-baseball-salaries/
+category: [Data Science]
+tags: [scikit-learn, statsmodels, Sports Analytics, Baseball, Python]
 ---
 
 1. [Introduction](#introduction)

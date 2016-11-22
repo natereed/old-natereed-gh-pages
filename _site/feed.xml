@@ -6,9 +6,63 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 05 Nov 2016 10:45:15 -0500</pubDate>
-    <lastBuildDate>Sat, 05 Nov 2016 10:45:15 -0500</lastBuildDate>
+    <pubDate>Tue, 22 Nov 2016 08:54:06 -0600</pubDate>
+    <lastBuildDate>Tue, 22 Nov 2016 08:54:06 -0600</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>CS105 Lab 1B - Word Count</title>
+        <description>&lt;p&gt;I recently finished the EdX CS105 lab on word counts in Spark.  Here is the &lt;a href=&quot;https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/452775446650638/1948040393236554/1552644135156684/latest.html&quot;&gt;Python notebook&lt;/a&gt; deployed on Data Bricks.&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 22 Nov 2016 00:00:00 -0600</pubDate>
+        <link>http://localhost:4000/cs105-lab1b-word-count/</link>
+        <guid isPermaLink="true">http://localhost:4000/cs105-lab1b-word-count/</guid>
+        
+        <category>Spark</category>
+        
+        <category>Python</category>
+        
+        
+        <category>News</category>
+        
+      </item>
+    
+      <item>
+        <title>Web Scraping Secrets</title>
+        <description>&lt;p&gt;On my to-do list is to write a book about all I know on the topic of web scraping.  &lt;a href=&quot;http://www.webscrapingsecrets.com&quot;&gt;“Web Scraping Secrets”&lt;/a&gt; will cover the use of the Python Scrapy framework, as well as more advanced topics like headless browsers and PhantomJS. It’s a “living” document, as I imagine I’ll want to update it as time goes on.&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 21 Nov 2016 00:00:00 -0600</pubDate>
+        <link>http://localhost:4000/web-scraping-secrets/</link>
+        <guid isPermaLink="true">http://localhost:4000/web-scraping-secrets/</guid>
+        
+        <category>Python</category>
+        
+        
+        <category>Programming</category>
+        
+      </item>
+    
+      <item>
+        <title>Finished Springboard</title>
+        <description>&lt;h1 id=&quot;finished-springboard&quot;&gt;Finished Springboard&lt;/h1&gt;
+
+&lt;p&gt;After 3 months of being a full-time “student,” I am finished with Springboard. I submitted Data Science Capstone project at the beginning of November. If you’re reading this, chances are good that you read my study on Baseball Salaries.&lt;/p&gt;
+
+&lt;p&gt;I would like to write a follow-up post at some point to serve as a retrospective for why I did it, how it went, etc.&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 21 Nov 2016 00:00:00 -0600</pubDate>
+        <link>http://localhost:4000/finished-springboard/</link>
+        <guid isPermaLink="true">http://localhost:4000/finished-springboard/</guid>
+        
+        <category>Data Science</category>
+        
+        
+        <category>News</category>
+        
+      </item>
     
       <item>
         <title>Using Regression to Predict Baseball Salaries</title>
@@ -1140,6 +1194,18 @@ Warnings:
         <link>http://localhost:4000/using-regression-to-predict-baseball-salaries/</link>
         <guid isPermaLink="true">http://localhost:4000/using-regression-to-predict-baseball-salaries/</guid>
         
+        <category>scikit-learn</category>
+        
+        <category>statsmodels</category>
+        
+        <category>Sports Analytics</category>
+        
+        <category>Baseball</category>
+        
+        <category>Python</category>
+        
+        
+        <category>Data Science</category>
         
       </item>
     
@@ -1200,39 +1266,14 @@ Warnings:
         <link>http://localhost:4000/are-pitchers-good-at-batting/</link>
         <guid isPermaLink="true">http://localhost:4000/are-pitchers-good-at-batting/</guid>
         
+        <category>Sports Analytics</category>
         
-      </item>
-    
-      <item>
-        <title>Working with Large Data Sets in R</title>
-        <description>&lt;p&gt;Typically, analysis in R is performed in RAM on a single node compute cluster.&lt;/p&gt;
-
-&lt;p&gt;As the scale of data grows, the analyst is forced to make some tradeoffs among considerations such as time, space and accuracy. A prediction method might be very accurate but unsuitable for production due to its slow running time. A larger training set leads to greater accuracy but tests the limits of hardware.&lt;/p&gt;
-
-&lt;p&gt;For very large data sets, R might be in the wrong class of tools altogether. For “medium size” data – too large to make sense of in a spreadsheet, but too small to justify Hadoop or other “Big Data” solutions – we would like to use R to develop an effective prototype within the time and space constraints that we inevitably face.&lt;/p&gt;
-
-&lt;p&gt;There are at least a couple ways that we can use to make these tough jobs in R easier:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Chunking and checkpoints&lt;/li&gt;
-  &lt;li&gt;Parallelism&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The concept of parallelism is well-understood, and there are many resources that explain packages like &lt;em&gt;foreach&lt;/em&gt; and &lt;em&gt;parallel&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;Another important concept is how large tasks can be broken up into small pieces, to make it easier to track work. In addition, chunking large tasks makes it possible to recover from failures.&lt;/p&gt;
-
-&lt;p&gt;In a follow-up post, I will show my “chunking” module, which can be used to break up a large piece of work into smaller ones.&lt;/p&gt;
-
-</description>
-        <pubDate>Mon, 22 Aug 2016 20:17:27 -0500</pubDate>
-        <link>http://localhost:4000/r/data-wrangling/2016/08/22/wrangling-large-data-sets-in-R-part-1.html</link>
-        <guid isPermaLink="true">http://localhost:4000/r/data-wrangling/2016/08/22/wrangling-large-data-sets-in-R-part-1.html</guid>
+        <category>Exploratory Analysis</category>
+        
+        <category>Baseball</category>
         
         
-        <category>R</category>
-        
-        <category>data-wrangling</category>
+        <category>Data Science</category>
         
       </item>
     

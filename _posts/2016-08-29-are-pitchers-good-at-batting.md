@@ -2,6 +2,8 @@
 layout: page
 title: Are Pitchers Good at Batting?
 permalink: /are-pitchers-good-at-batting/
+category: [Data Science]
+tags: [Sports Analytics, Exploratory Analysis, Baseball]
 ---
 
 ## Introduction
