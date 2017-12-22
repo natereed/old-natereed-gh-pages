@@ -24,4 +24,4 @@ github_username:  natereed
 
 # Build settings
 markdown: kramdown
-theme: minima
+theme: jekyll-theme-minimal
